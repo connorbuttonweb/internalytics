@@ -69,17 +69,22 @@
     </div>
   </section>
 
-<!-- Cycle Intelligence — Infinite Desktop Wheel -->
+
+
+
+
+  
+<!-- Cycle Intelligence Desktop Scrollable Calendar (Aligned Version) -->
 <section id="cycle-intelligence" class="section headroom">
   <div class="container">
     <div class="row" style="justify-content:space-between;align-items:center;">
-      <h2 class="m-0">Cycle Intelligence — Infinite Timeline</h2>
+      <h2 class="m-0">Cycle Intelligence — Timeline</h2>
       <div>
         <button id="prevBtn" class="btn ghost small">←</button>
         <button id="nextBtn" class="btn ghost small">→</button>
       </div>
     </div>
-    <p class="caption mt-2">Scroll or drag to explore months. The calendar loops infinitely.</p>
+    <p class="caption mt-2">Interactive recruiting timeline by discipline. Click and drag to explore months.</p>
 
     <div class="calendar-wrapper" id="calendarWrapper">
       <div class="calendar-header">
@@ -93,71 +98,87 @@
 </section>
 
 <style>
+/* ---- Container & Layout ---- */
 .calendar-wrapper {
   position: relative;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border-color, #ddd);
   border-radius: 12px;
-  overflow-x: scroll;
-  overflow-y: hidden;
-  scrollbar-width: none;
+  overflow: hidden;
+  background: #fff;
 }
-.calendar-wrapper::-webkit-scrollbar { display: none; }
 
 .calendar-header {
   display: flex;
   border-bottom: 1px solid #ddd;
 }
+
 .discipline-label-header {
   flex: 0 0 160px;
   font-weight: 600;
+  text-align: left;
   padding: 10px 12px;
-  background: #fafafa;
+  background: var(--bg-subtle, #f7f7f7);
   border-right: 1px solid #ddd;
   z-index: 5;
 }
+
 .calendar-month-header {
   display: grid;
-  grid-template-columns: repeat(36, 1fr); /* 3 years worth of months for looping */
+  grid-template-columns: repeat(12, 1fr);
   flex: 1;
   text-align: center;
   font-weight: 600;
-  background: #f7f7f7;
+  background: var(--bg-subtle, #fafafa);
   padding: 10px 0;
   position: relative;
+  z-index: 1;
 }
-.calendar-body { position: relative; }
 
+.calendar-body {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  max-height: 320px;
+}
+
+/* ---- Each Row ---- */
 .calendar-row-wrapper {
   display: flex;
   align-items: center;
   border-bottom: 1px solid #eee;
+  position: relative;
 }
+
 .discipline-cell {
   flex: 0 0 160px;
   font-weight: 600;
   padding: 10px 12px;
   border-right: 1px solid #eee;
-  background: #fafafa;
+  background: var(--bg-subtle, #fafafa);
   z-index: 4;
 }
+
 .timeline-cell {
   flex: 1;
+  overflow: hidden;
   position: relative;
   height: 42px;
-  min-width: 2400px; /* wide track for smooth scroll */
 }
+
 .timeline-grid {
   display: grid;
-  grid-template-columns: repeat(36, 1fr);
+  grid-template-columns: repeat(12, 1fr);
   height: 100%;
 }
-.highlight {
+
+.timeline-cell .highlight {
   position: absolute;
   height: 26px;
   background: rgba(0, 200, 0, 0.25);
   border-radius: 4px;
   top: 8px;
 }
+
 .today-line {
   position: absolute;
   top: 0;
@@ -167,131 +188,141 @@
   z-index: 10;
   pointer-events: none;
 }
-.calendar-wrapper.dragging { cursor: grabbing; }
+
+.calendar-scroll {
+  overflow: hidden; /* hides scrollbar */
+  cursor: grab;
+}
+.calendar-scroll.dragging {
+  cursor: grabbing;
+}
 </style>
 
 <script>
+// ----- Config -----
 const monthHeader = document.getElementById("monthHeader");
 const calendarBody = document.getElementById("calendarBody");
 const todayLine = document.getElementById("todayLine");
-const wrapper = document.getElementById("calendarWrapper");
+const MONTH_NAMES = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 
-const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 const cycleRanges = [
-  { discipline:"Finance",ranges:[{start:"2025-09-01",end:"2025-11-15"}]},
-  { discipline:"Accounting",ranges:[{start:"2025-07-01",end:"2025-09-30"}]},
-  { discipline:"Consulting",ranges:[{start:"2025-08-15",end:"2025-10-31"}]},
-  { discipline:"Real Estate",ranges:[{start:"2025-09-10",end:"2025-12-05"}]}
+  { discipline: "Finance",     ranges: [{ start: "2025-09-01", end: "2025-11-15" }] },
+  { discipline: "Accounting",  ranges: [{ start: "2025-07-01", end: "2025-09-30" }] },
+  { discipline: "Consulting",  ranges: [{ start: "2025-08-15", end: "2025-10-31" }] },
+  { discipline: "Real Estate", ranges: [{ start: "2025-09-10", end: "2025-12-05" }] }
 ];
 
-// --- Render header and rows (3x months for looping illusion) ---
+// ----- Rendering -----
 function renderCalendar() {
-  monthHeader.innerHTML="";
-  for(let i=0;i<36;i++){
-    const cell=document.createElement("div");
-    cell.textContent=MONTHS[i%12];
+  // Build month header
+  monthHeader.innerHTML = "";
+  MONTH_NAMES.forEach(m => {
+    const cell = document.createElement("div");
+    cell.textContent = m;
     monthHeader.appendChild(cell);
-  }
+  });
 
-  calendarBody.innerHTML="";
-  const startOfYear=new Date(new Date().getFullYear(),0,1);
-  const endOfYear=new Date(new Date().getFullYear(),11,31);
-  const totalMs=endOfYear-startOfYear;
+  // Build discipline rows
+  calendarBody.innerHTML = "";
+  const startOfYear = new Date(new Date().getFullYear(), 0, 1);
+  const endOfYear = new Date(new Date().getFullYear(), 11, 31);
+  const totalMs = endOfYear - startOfYear;
 
-  cycleRanges.forEach(item=>{
-    const row=document.createElement("div");
-    row.className="calendar-row-wrapper";
+  cycleRanges.forEach(item => {
+    const rowWrapper = document.createElement("div");
+    rowWrapper.className = "calendar-row-wrapper";
 
-    const label=document.createElement("div");
-    label.className="discipline-cell";
-    label.textContent=item.discipline;
-    row.appendChild(label);
+    const label = document.createElement("div");
+    label.className = "discipline-cell";
+    label.textContent = item.discipline;
+    rowWrapper.appendChild(label);
 
-    const timeline=document.createElement("div");
-    timeline.className="timeline-cell";
-    const grid=document.createElement("div");
-    grid.className="timeline-grid";
+    const timeline = document.createElement("div");
+    timeline.className = "timeline-cell";
+    const grid = document.createElement("div");
+    grid.className = "timeline-grid";
     timeline.appendChild(grid);
 
-    item.ranges.forEach(r=>{
-      const s=new Date(r.start);
-      const e=new Date(r.end);
-      const sRatio=(s-startOfYear)/totalMs;
-      const eRatio=(e-startOfYear)/totalMs;
-      for(let copy=0;copy<3;copy++){ // repeat thrice for looped illusion
-        const h=document.createElement("div");
-        h.className="highlight";
-        h.style.left=`calc(${(sRatio*100 + copy*100)}%)`;
-        h.style.width=`${(eRatio-sRatio)*100}%`;
-        timeline.appendChild(h);
-      }
+    // Add highlight bars
+    item.ranges.forEach(r => {
+      const s = new Date(r.start);
+      const e = new Date(r.end);
+      const startRatio = (s - startOfYear) / totalMs;
+      const endRatio = (e - startOfYear) / totalMs;
+      const highlight = document.createElement("div");
+      highlight.className = "highlight";
+      highlight.style.left = `${startRatio * 100}%`;
+      highlight.style.width = `${(endRatio - startRatio) * 100}%`;
+      timeline.appendChild(highlight);
     });
 
-    row.appendChild(timeline);
-    calendarBody.appendChild(row);
+    rowWrapper.appendChild(timeline);
+    calendarBody.appendChild(rowWrapper);
   });
 
   updateTodayLine();
 }
 
-// --- Accurate today line position ---
-function updateTodayLine(){
-  const now=new Date();
-  const startOfYear=new Date(now.getFullYear(),0,1);
-  const endOfYear=new Date(now.getFullYear(),11,31);
-  const ratio=(now-startOfYear)/(endOfYear-startOfYear);
-  const totalWidth=monthHeader.offsetWidth/3; // one-year width
-  // offset by left label column
-  todayLine.style.left=`${160 + ratio*totalWidth}px`;
+// ----- Today Line -----
+function updateTodayLine() {
+  const now = new Date();
+  const startOfYear = new Date(now.getFullYear(), 0, 1);
+  const endOfYear = new Date(now.getFullYear(), 11, 31);
+  const ratio = (now - startOfYear) / (endOfYear - startOfYear);
+  const totalWidth = monthHeader.offsetWidth;
+  todayLine.style.left = `${160 + ratio * totalWidth}px`; // +160 for fixed column width
 }
-setInterval(updateTodayLine,60000);
 
-// --- Drag + Scroll combined ---
-let isDown=false,startX,scrollLeft;
-wrapper.addEventListener("mousedown",(e)=>{
-  isDown=true;
-  wrapper.classList.add("dragging");
-  startX=e.pageX-wrapper.offsetLeft;
-  scrollLeft=wrapper.scrollLeft;
+// ----- Drag Scroll -----
+const calendarWrapper = document.getElementById("calendarWrapper");
+let isDown = false;
+let startX;
+let scrollLeft;
+
+calendarWrapper.addEventListener('mousedown', (e) => {
+  isDown = true;
+  calendarWrapper.classList.add('dragging');
+  startX = e.pageX - calendarWrapper.offsetLeft;
+  scrollLeft = calendarWrapper.scrollLeft;
 });
-wrapper.addEventListener("mouseup",()=>{isDown=false;wrapper.classList.remove("dragging");});
-wrapper.addEventListener("mouseleave",()=>{isDown=false;wrapper.classList.remove("dragging");});
-wrapper.addEventListener("mousemove",(e)=>{
-  if(!isDown)return;
+
+calendarWrapper.addEventListener('mouseleave', () => {
+  isDown = false;
+  calendarWrapper.classList.remove('dragging');
+});
+
+calendarWrapper.addEventListener('mouseup', () => {
+  isDown = false;
+  calendarWrapper.classList.remove('dragging');
+});
+
+calendarWrapper.addEventListener('mousemove', (e) => {
+  if (!isDown) return;
   e.preventDefault();
-  const x=e.pageX-wrapper.offsetLeft;
-  const walk=(x-startX);
-  wrapper.scrollLeft=scrollLeft-walk;
+  const x = e.pageX - calendarWrapper.offsetLeft;
+  const walk = (x - startX);
+  calendarWrapper.scrollLeft = scrollLeft - walk;
 });
 
-// --- Wheel scroll for trackpads/mice ---
-wrapper.addEventListener("wheel",(e)=>{
-  if(Math.abs(e.deltaY)>Math.abs(e.deltaX)){ // vertical wheel moves horizontal
-    e.preventDefault();
-    wrapper.scrollLeft+=e.deltaY;
-  }
-},{passive:false});
+// ----- Arrow Buttons -----
+document.getElementById("prevBtn").addEventListener("click", () => {
+  calendarWrapper.scrollBy({ left: -300, behavior: "smooth" });
+});
+document.getElementById("nextBtn").addEventListener("click", () => {
+  calendarWrapper.scrollBy({ left: 300, behavior: "smooth" });
+});
 
-// --- Infinite wrap illusion ---
-function loopScroll(){
-  const totalWidth=monthHeader.scrollWidth/3; // one "year" section width
-  if(wrapper.scrollLeft < totalWidth*0.5){
-    wrapper.scrollLeft += totalWidth;
-  } else if(wrapper.scrollLeft > totalWidth*1.5){
-    wrapper.scrollLeft -= totalWidth;
-  }
-  requestAnimationFrame(loopScroll);
-}
-
-// --- Arrow buttons ---
-document.getElementById("prevBtn").addEventListener("click",()=>wrapper.scrollBy({left:-300,behavior:"smooth"}));
-document.getElementById("nextBtn").addEventListener("click",()=>wrapper.scrollBy({left:300,behavior:"smooth"}));
-
-// --- Init ---
+// ----- Init -----
 renderCalendar();
-wrapper.scrollLeft = wrapper.scrollWidth / 3; // center to mid-year copy
-loopScroll();
+setInterval(updateTodayLine, 60000);
 </script>
+
+
+
+
+
+
+
 
   <!-- Profession Feature Grid -->
   <section class="section">
