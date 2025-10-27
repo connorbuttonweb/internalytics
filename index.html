@@ -1,39 +1,493 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Internalytics — Analytical Internship Intelligence Hub</title>
-  <link rel="stylesheet" href="assets/css/main.css" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Internalytics — a student-first internship intelligence hub with cycles, playbooks, and an opportunity radar for strategy, product, finance and more.">
+  <title>Internalytics — Internship Intelligence</title>
+
+  <!-- Styles -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="main.css">
 </head>
 <body>
-  <header class="site-header">
-    <h1>Internalytics</h1>
-    <nav class="nav">
-      <a href="index.html">Home</a>
-      <a href="radar.html">Radar</a>
-      <a href="calendar.html">Calendar</a>
-      <a href="playbooks.html">Playbooks</a>
-      <a href="networking.html">Networking</a>
-      <a href="tracker.html">Tracker</a>
-    </nav>
+  <!-- ========================================
+       Header / Navigation
+  ========================================== -->
+  <header class="header">
+    <div class="container inner">
+      <a href="#" class="brand" aria-label="Internalytics home">
+        <strong style="font-family: var(--font-sans-head); color: var(--text-strong); font-size: 1.125rem;">Internalytics</strong>
+      </a>
+      <nav class="nav" aria-label="Primary">
+        <a href="#" aria-current="page">Home</a>
+        <a href="#radar">Opportunities</a>
+        <a href="#playbooks">Playbooks</a>
+        <a href="#tracker">Tracker</a>
+        <a href="#networking">Networking</a>
+        <a href="documents.html">Documents</a>
+        <a class="cta" href="#subscribe">Get updates</a>
+      </nav>
+    </div>
   </header>
 
-  <main>
-    <section class="hero">
-      <h2>Recruiting, made analytical.</h2>
-      <p>Filter by profession, see cycle timelines, and act on data-driven insights — not a job feed.</p>
-    </section>
+  <!-- ========================================
+       Hero
+  ========================================== -->
+  <section class="hero">
+    <div class="container content">
+      <h1>Internship Intelligence for Students</h1>
+      <p>Your clean, credible hub for internship cycles, role insights, and step‑by‑step playbooks. Built to act differently than a job board—<em>an information engine</em> for getting hired.</p>
+      <div class="actions">
+        <a class="btn" href="#radar">Explore open roles</a>
+        <a class="btn ghost" href="#playbooks">View playbooks</a>
+      </div>
+      <div class="chips" aria-label="Popular paths">
+        <span class="chip consulting">Consulting</span>
+        <span class="chip finance">Finance</span>
+        <span class="chip accounting">Accounting</span>
+        <span class="chip realestate">Real Estate</span>
+      </div>
 
-    <section class="cards">
-      <a class="card" href="radar.html"><h3>Opportunity Radar</h3><p>Curated roles with signal scores & context.</p></a>
-      <a class="card" href="calendar.html"><h3>Cycle Intelligence</h3><p>Open/interview/offer windows by profession.</p></a>
-      <a class="card" href="playbooks.html"><h3>Playbooks</h3><p>Data-backed steps to win each role.</p></a>
-      <a class="card" href="networking.html"><h3>Networking Hub</h3><p>Outreach cadences, templates, and tracking.</p></a>
-      <a class="card" href="tracker.html"><h3>Tracker</h3><p>Kanban for applications & outreach.</p></a>
-    </section>
-  </main>
+      <!-- KPI snapshot -->
+      <div class="analytics-bar">
+        <div class="kpi">
+          <div class="value">42</div>
+          <div class="label">Open roles tracked</div>
+        </div>
+        <div class="kpi">
+          <div class="value">15</div>
+          <div class="label">Companies on watch</div>
+        </div>
+        <div class="kpi">
+          <div class="value">3</div>
+          <div class="label">New since last week</div>
+        </div>
+        <div class="kpi">
+          <div class="value">4</div>
+          <div class="label">Updated playbooks</div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  <script src="assets/js/app.js"></script>
+  <!-- ========================================
+       Opportunity Radar (Cards + Table)
+  ========================================== -->
+  <section id="radar" class="section headroom">
+    <div class="container">
+      <div class="radar-controls">
+        <h2>Opportunity Radar</h2>
+        <div class="row">
+          <div class="view-toggle" role="group" aria-label="View toggle">
+            <button type="button" class="js-toggle is-cards" aria-pressed="true" data-view="cards">Cards</button>
+            <button type="button" class="js-toggle" aria-pressed="false" data-view="table">Table</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cards view -->
+      <div class="radar-grid" id="radarCards" role="list">
+        <!-- Card: Consulting -->
+        <article class="radar-card lift" role="listitem" data-profession="consulting">
+          <div class="top-line">
+            <div>
+              <div class="signal">Open</div>
+              <h3 class="m-0">Strategy Intern — Toronto</h3>
+              <p class="why">Analytical case work, problem structuring, and client‑ready deliverables. Summer 2026.</p>
+            </div>
+            <button class="btn neutral js-open-drawer" data-title="Strategy Intern — Toronto">Details</button>
+          </div>
+          <div class="tags">
+            <span class="tag">Consulting</span>
+            <span class="tag">Cycle: Fall → Winter</span>
+            <span class="tag">Apps: Open</span>
+          </div>
+        </article>
+
+        <!-- Card: Product -->
+        <article class="radar-card lift" role="listitem" data-profession="finance">
+          <div class="top-line">
+            <div>
+              <div class="signal" style="background: rgba(229,183,0,.12); color: var(--gold-400);">Interview</div>
+              <h3 class="m-0">Product Strategy — Student</h3>
+              <p class="why">Opportunity mapping, KPI stewardship, and cross‑functional experiments.</p>
+            </div>
+            <button class="btn neutral js-open-drawer" data-title="Product Strategy — Student">Details</button>
+          </div>
+          <div class="tags">
+            <span class="tag">Product</span>
+            <span class="tag">Cycle: Winter</span>
+            <span class="tag">Apps: Closed</span>
+          </div>
+        </article>
+
+        <!-- Card: Finance -->
+        <article class="radar-card lift" role="listitem" data-profession="finance">
+          <div class="top-line">
+            <div>
+              <div class="signal" style="background: rgba(46,204,113,.15); color: var(--offer-green-400);">Offer</div>
+              <h3 class="m-0">Corporate Finance — Summer Analyst</h3>
+              <p class="why">Valuation basics, dashboards, and exec‑ready insights. Great for quant + story.</p>
+            </div>
+            <button class="btn neutral js-open-drawer" data-title="Corporate Finance — Summer Analyst">Details</button>
+          </div>
+          <div class="tags">
+            <span class="tag">Finance</span>
+            <span class="tag">Cycle: Rolling</span>
+            <span class="tag">Apps: Closing Soon</span>
+          </div>
+        </article>
+      </div>
+
+      <!-- Table view -->
+      <div id="radarTable" class="hide">
+        <table class="table" aria-label="Opportunity Radar table view">
+          <thead>
+            <tr>
+              <th>Role</th>
+              <th>Path</th>
+              <th>Cycle</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Strategy Intern — Toronto</td>
+              <td>Consulting</td>
+              <td>Fall → Winter</td>
+              <td>Open</td>
+              <td><a class="btn neutral" href="#" role="button">Details</a></td>
+            </tr>
+            <tr>
+              <td>Product Strategy — Student</td>
+              <td>Product</td>
+              <td>Winter</td>
+              <td>Interview</td>
+              <td><a class="btn neutral" href="#" role="button">Details</a></td>
+            </tr>
+            <tr>
+              <td>Corporate Finance — Summer Analyst</td>
+              <td>Finance</td>
+              <td>Rolling</td>
+              <td>Offer</td>
+              <td><a class="btn neutral" href="#" role="button">Details</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Drawer (role details) -->
+  <aside class="drawer" id="drawer" aria-hidden="true" aria-label="Role details">
+    <div class="head">
+      <h3 class="m-0" id="drawerTitle">Role details</h3>
+      <button class="btn neutral" id="closeDrawer" type="button" aria-label="Close drawer">Close</button>
+    </div>
+    <div class="body">
+      <div class="col">
+        <div class="card">
+          <div class="title">What you’ll do</div>
+          <p>Problem framing, research synthesis, and concise deliverables. Expect structured thinking, client context, and a measurable impact.</p>
+        </div>
+        <div class="card">
+          <div class="title">Signals to stand out</div>
+          <ul>
+            <li>Showcase a 1‑page case teardown (structure + math + insight).</li>
+            <li>Quantify outcomes in bullets (KPI deltas). </li>
+            <li>Network notes: 2 coffee chats → 1 referral aim.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ========================================
+       Cycle Intelligence
+  ========================================== -->
+  <section id="cycles" class="section">
+    <div class="container">
+      <h2>Cycle Intelligence</h2>
+      <p class="small">A live, visual map of when applications open, interviews happen, and offers land.</p>
+
+      <div class="cyclemap mt-4" role="group" aria-label="Internship cycles">
+        <div class="legend mb-4">
+          <span class="dot open"></span><span class="caption">Open</span>
+          <span class="dot interview"></span><span class="caption">Interview</span>
+          <span class="dot offer"></span><span class="caption">Offer</span>
+        </div>
+
+        <div class="row">
+          <div class="role">Consulting — Strategy</div>
+          <div class="lane">
+            <div class="phase open" style="left: 6%; width: 22%;">Apps</div>
+            <div class="phase interview" style="left: 34%; width: 24%;">Interviews</div>
+            <div class="phase offer" style="left: 62%; width: 14%;">Offers</div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="role">Product — Strategy</div>
+          <div class="lane">
+            <div class="phase open" style="left: 12%; width: 20%;">Apps</div>
+            <div class="phase interview" style="left: 38%; width: 18%;">Interviews</div>
+            <div class="phase offer" style="left: 58%; width: 16%;">Offers</div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="role">Finance — Corp / Markets</div>
+          <div class="lane">
+            <div class="phase open" style="left: 8%; width: 18%;">Apps</div>
+            <div class="phase interview" style="left: 30%; width: 24%;">Interviews</div>
+            <div class="phase offer" style="left: 58%; width: 18%;">Offers</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================
+       Playbooks (Tabs)
+  ========================================== -->
+  <section id="playbooks" class="section">
+    <div class="container">
+      <h2>Playbooks</h2>
+      <p class="small">Concise, student‑first guides for each step — resume, networking, interviews.</p>
+
+      <div class="tabs mt-4">
+        <div class="tablist" role="tablist" aria-label="Playbook tabs">
+          <button class="tab" role="tab" aria-selected="true" aria-controls="tab-resume" id="tabbtn-resume">Resume</button>
+          <button class="tab" role="tab" aria-selected="false" aria-controls="tab-network" id="tabbtn-network">Networking</button>
+          <button class="tab" role="tab" aria-selected="false" aria-controls="tab-interview" id="tabbtn-interview">Interview</button>
+        </div>
+
+        <section id="tab-resume" class="tabpanel" role="tabpanel" aria-labelledby="tabbtn-resume">
+          <div class="grid cols-3">
+            <div class="card feature-card consulting">
+              <div class="title">Structure > Story</div>
+              <p>Lead with outcomes (KPI deltas). Keep bullets crisp, 1–2 lines max.</p>
+            </div>
+            <div class="card feature-card accounting">
+              <div class="title">Impact math</div>
+              <p>Quantify: time saved, cost reduced, revenue added, quality improved.</p>
+            </div>
+            <div class="card feature-card finance">
+              <div class="title">Show don’t tell</div>
+              <p>Link a portfolio piece or 1‑page teardown in your resume footer.</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="tab-network" class="tabpanel hide" role="tabpanel" aria-labelledby="tabbtn-network">
+          <div class="grid cols-3">
+            <div class="card feature-card consulting">
+              <div class="title">2→1 rule</div>
+              <p>Two short chats → one concrete referral ask. Keep it specific.</p>
+            </div>
+            <div class="card feature-card accounting">
+              <div class="title">Give first</div>
+              <p>Share a small insight or teardown to add value before asking.</p>
+            </div>
+            <div class="card feature-card finance">
+              <div class="title">Notes system</div>
+              <p>Track contacts, roles, and follow‑ups in your Kanban.</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="tab-interview" class="tabpanel hide" role="tabpanel" aria-labelledby="tabbtn-interview">
+          <div class="grid cols-3">
+            <div class="card feature-card consulting">
+              <div class="title">Case patterning</div>
+              <p>MECE issue tree, 3 KPIs, quick math, and a crisp recap.</p>
+            </div>
+            <div class="card feature-card accounting">
+              <div class="title">Behavioral loop</div>
+              <p>STAR + metric + reflection. Keep answers 60–90 seconds.</p>
+            </div>
+            <div class="card feature-card finance">
+              <div class="title">Take‑home</div>
+              <p>State assumptions, build a minimal model, and narrate insights.</p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================
+       Networking Hub
+  ========================================== -->
+  <section id="networking" class="section">
+    <div class="container">
+      <h2>Networking Hub</h2>
+      <div class="split mt-4">
+        <div class="list" aria-label="People list">
+          <div class="row">
+            <div class="title">Riley M. — Consulting</div>
+            <div class="meta">Last chatted: Oct 10</div>
+          </div>
+          <div class="row">
+            <div class="title">Andie A. — Consulting</div>
+            <div class="meta">Last chatted: Oct 14</div>
+          </div>
+          <div class="row">
+            <div class="title">Mark B. — Strategy, Fintech</div>
+            <div class="meta">Last chatted: Oct 24</div>
+          </div>
+          <div class="row">
+            <div class="title">Leo — Strategy</div>
+            <div class="meta">Queued outreach</div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="card">
+            <div class="title">Notes</div>
+            <p>Keep tangible next steps, e.g., “Send teardown PDF by Friday; ask for post‑info‑session chat.”</p>
+            <form class="mt-4" action="#" method="post">
+              <label class="label" for="note">Add a note</label>
+              <textarea class="input" id="note" rows="4" placeholder="What did you learn? What’s the follow‑up?"></textarea>
+              <div class="row mt-2">
+                <button class="btn" type="button">Save</button>
+                <button class="btn neutral" type="reset">Clear</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================
+       Tracker (Kanban)
+  ========================================== -->
+  <section id="tracker" class="section">
+    <div class="container">
+      <h2>Application Tracker</h2>
+      <p class="small">Move tickets as you progress: Prospect → Applied → Interview → Offer.</p>
+      <div class="kanban mt-4">
+        <div class="column">
+          <div class="col-title">Prospect</div>
+          <div class="ticket">
+            <div class="title">Questrade — Strategy Intern</div>
+            <div class="meta">Save job link · Add teardown</div>
+          </div>
+          <div class="ticket">
+            <div class="title">Monitor Deloitte — Summer 2026</div>
+            <div class="meta">Connect with campus recruiter</div>
+          </div>
+        </div>
+
+        <div class="column">
+          <div class="col-title">Applied</div>
+          <div class="ticket">
+            <div class="title">Manulife — Corp Strategy</div>
+            <div class="meta">Resume v3 · Cover v2</div>
+          </div>
+        </div>
+
+        <div class="column">
+          <div class="col-title">Interview</div>
+          <div class="ticket">
+            <div class="title">TechCo — Product Strategy</div>
+            <div class="meta">Case prep: demand sizing</div>
+          </div>
+        </div>
+
+        <div class="column">
+          <div class="col-title">Offer</div>
+          <div class="ticket">
+            <div class="title">IB — Summer Analyst</div>
+            <div class="meta">Exploding 72h · Evaluate</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================
+       Subscribe / Footer
+  ========================================== -->
+  <section id="subscribe" class="section">
+    <div class="container">
+      <div class="card">
+        <h2 class="m-0">Stay in the loop</h2>
+        <p class="mt-2">Get cycle changes and newly‑open roles. No spam.</p>
+        <form class="row mt-4" action="#" method="post">
+          <input class="input" type="email" name="email" placeholder="your@email.com" aria-label="Email">
+          <button class="btn" type="submit">Subscribe</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container inner">
+      <div class="row">
+        <strong>Internalytics</strong>
+      </div>
+      <small>© <span id="year"></span> Internalytics. Built for students. Not a job board — an information hub.</small>
+    </div>
+  </footer>
+
+  <!-- ========================================
+       Minimal Interactions (no frameworks)
+  ========================================== -->
+  <script>
+    // Year stamp
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Radar view toggle
+    const toggleBtns = document.querySelectorAll('.js-toggle');
+    const cards = document.getElementById('radarCards');
+    const table = document.getElementById('radarTable');
+    toggleBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        toggleBtns.forEach(b => b.setAttribute('aria-pressed', 'false'));
+        btn.setAttribute('aria-pressed', 'true');
+        if (btn.dataset.view === 'table') {
+          cards.classList.add('hide');
+          table.classList.remove('hide');
+        } else {
+          table.classList.add('hide');
+          cards.classList.remove('hide');
+        }
+      });
+    });
+
+    // Drawer open/close
+    const drawer = document.getElementById('drawer');
+    const closeDrawer = document.getElementById('closeDrawer');
+    document.querySelectorAll('.js-open-drawer').forEach(el => {
+      el.addEventListener('click', () => {
+        const title = el.getAttribute('data-title') || 'Role details';
+        document.getElementById('drawerTitle').textContent = title;
+        drawer.setAttribute('open', '');
+        drawer.setAttribute('aria-hidden', 'false');
+      });
+    });
+    closeDrawer.addEventListener('click', () => {
+      drawer.removeAttribute('open');
+      drawer.setAttribute('aria-hidden', 'true');
+    });
+
+    // Tabs
+    const tabButtons = document.querySelectorAll('.tablist .tab');
+    const panels = document.querySelectorAll('.tabpanel');
+    tabButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabButtons.forEach(b => b.setAttribute('aria-selected','false'));
+        panels.forEach(p => p.classList.add('hide'));
+        const id = btn.getAttribute('aria-controls');
+        btn.setAttribute('aria-selected','true');
+        document.getElementById(id).classList.remove('hide');
+      });
+    });
+  </script>
 </body>
 </html>
