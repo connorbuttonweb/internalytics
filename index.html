@@ -73,248 +73,202 @@
 
 
 
-  
-<!-- Cycle Intelligence Desktop Scrollable Calendar (Aligned Version) -->
+
+<!-- Cycle Intelligence — Infinite Desktop Wheel (fixed left column) -->
 <section id="cycle-intelligence" class="section headroom">
   <div class="container">
     <div class="row" style="justify-content:space-between;align-items:center;">
-      <h2 class="m-0">Cycle Intelligence — Timeline</h2>
+      <h2 class="m-0">Cycle Intelligence — Infinite Timeline</h2>
       <div>
         <button id="prevBtn" class="btn ghost small">←</button>
         <button id="nextBtn" class="btn ghost small">→</button>
       </div>
     </div>
-    <p class="caption mt-2">Interactive recruiting timeline by discipline. Click and drag to explore months.</p>
+    <p class="caption mt-2">Scroll or drag the timeline. Labels stay pinned; months loop endlessly.</p>
 
-    <div class="calendar-wrapper" id="calendarWrapper">
-      <div class="calendar-header">
-        <div class="discipline-label-header">Discipline</div>
-        <div class="calendar-month-header" id="monthHeader"></div>
+    <div class="ci-wrap">
+      <!-- Left: fixed labels -->
+      <div class="ci-left">
+        <div class="ci-left-head">Discipline</div>
+        <div id="ciLabels" class="ci-left-body"></div>
       </div>
-      <div class="calendar-body" id="calendarBody"></div>
-      <div class="today-line" id="todayLine"></div>
+
+      <!-- Right: scrollable + looping content -->
+      <div class="ci-right">
+        <div id="ciScroll" class="ci-scroll">
+          <div class="ci-right-head" id="ciMonths"></div>
+          <div id="ciRows" class="ci-rows"></div>
+          <div class="ci-today" id="ciToday"></div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
 <style>
-/* ---- Container & Layout ---- */
-.calendar-wrapper {
-  position: relative;
-  border: 1px solid var(--border-color, #ddd);
-  border-radius: 12px;
-  overflow: hidden;
-  background: #fff;
-}
+/* ---- Layout ---- */
+.ci-wrap{display:flex;position:relative;border:1px solid #ddd;border-radius:12px;overflow:hidden;background:#fff}
+.ci-left{flex:0 0 160px;border-right:1px solid #ddd;background:#fafafa;z-index:2}
+.ci-right{position:relative;flex:1;overflow:hidden}
 
-.calendar-header {
-  display: flex;
-  border-bottom: 1px solid #ddd;
-}
+/* Left column */
+.ci-left-head{padding:10px 12px;font-weight:600;border-bottom:1px solid #ddd;background:#f7f7f7}
+.ci-left-body .ci-label{height:42px;display:flex;align-items:center;padding:0 12px;border-bottom:1px solid #eee;font-weight:600}
 
-.discipline-label-header {
-  flex: 0 0 160px;
-  font-weight: 600;
-  text-align: left;
-  padding: 10px 12px;
-  background: var(--bg-subtle, #f7f7f7);
-  border-right: 1px solid #ddd;
-  z-index: 5;
-}
+/* Right scroller */
+.ci-scroll{position:relative;overflow-x:scroll;overflow-y:hidden;cursor:grab;scrollbar-width:none}
+.ci-scroll::-webkit-scrollbar{display:none}
+.ci-scroll.dragging{cursor:grabbing}
 
-.calendar-month-header {
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  flex: 1;
-  text-align: center;
-  font-weight: 600;
-  background: var(--bg-subtle, #fafafa);
-  padding: 10px 0;
-  position: relative;
-  z-index: 1;
-}
+/* Header months: 36 columns (3× year for loop) */
+.ci-right-head{display:grid;grid-template-columns:repeat(36,1fr);text-align:center;font-weight:600;background:#f7f7f7;border-bottom:1px solid #ddd}
+.ci-right-head > div{padding:10px 0;position:relative}
+.ci-right-head > div::after{content:"";position:absolute;right:0;top:50%;transform:translateY(-50%);height:60%;width:1px;background:#e9e9e9}
 
-.calendar-body {
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  max-height: 320px;
-}
+/* Rows area */
+.ci-rows{position:relative}
+.ci-row{display:grid;grid-template-columns:repeat(36,1fr);height:42px;border-bottom:1px solid #eee;position:relative}
+.ci-cell{position:relative}
+.ci-cell::after{content:"";position:absolute;right:0;top:6px;bottom:6px;width:1px;background:#f0f0f0}
 
-/* ---- Each Row ---- */
-.calendar-row-wrapper {
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid #eee;
-  position: relative;
-}
+/* Highlight bars */
+.ci-bar{position:absolute;height:26px;background:rgba(0,200,0,.25);border-radius:4px;top:8px}
 
-.discipline-cell {
-  flex: 0 0 160px;
-  font-weight: 600;
-  padding: 10px 12px;
-  border-right: 1px solid #eee;
-  background: var(--bg-subtle, #fafafa);
-  z-index: 4;
-}
-
-.timeline-cell {
-  flex: 1;
-  overflow: hidden;
-  position: relative;
-  height: 42px;
-}
-
-.timeline-grid {
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  height: 100%;
-}
-
-.timeline-cell .highlight {
-  position: absolute;
-  height: 26px;
-  background: rgba(0, 200, 0, 0.25);
-  border-radius: 4px;
-  top: 8px;
-}
-
-.today-line {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  background: red;
-  z-index: 10;
-  pointer-events: none;
-}
-
-.calendar-scroll {
-  overflow: hidden; /* hides scrollbar */
-  cursor: grab;
-}
-.calendar-scroll.dragging {
-  cursor: grabbing;
-}
+/* Today line (inside scroller so it moves with content) */
+.ci-today{position:absolute;top:0;bottom:0;width:2px;background:red;pointer-events:none;z-index:5}
 </style>
 
 <script>
-// ----- Config -----
-const monthHeader = document.getElementById("monthHeader");
-const calendarBody = document.getElementById("calendarBody");
-const todayLine = document.getElementById("todayLine");
-const MONTH_NAMES = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-
-const cycleRanges = [
-  { discipline: "Finance",     ranges: [{ start: "2025-09-01", end: "2025-11-15" }] },
-  { discipline: "Accounting",  ranges: [{ start: "2025-07-01", end: "2025-09-30" }] },
-  { discipline: "Consulting",  ranges: [{ start: "2025-08-15", end: "2025-10-31" }] },
-  { discipline: "Real Estate", ranges: [{ start: "2025-09-10", end: "2025-12-05" }] }
+/* ===== Config/Data ===== */
+const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const DISCIPLINES = [
+  { name:"Finance",     ranges:[{start:"2025-09-01", end:"2025-11-15"}] },
+  { name:"Accounting",  ranges:[{start:"2025-07-01", end:"2025-09-30"}] },
+  { name:"Consulting",  ranges:[{start:"2025-08-15", end:"2025-10-31"}] },
+  { name:"Real Estate", ranges:[{start:"2025-09-10", end:"2025-12-05"}] }
 ];
 
-// ----- Rendering -----
-function renderCalendar() {
-  // Build month header
-  monthHeader.innerHTML = "";
-  MONTH_NAMES.forEach(m => {
-    const cell = document.createElement("div");
-    cell.textContent = m;
-    monthHeader.appendChild(cell);
+/* ===== Elements ===== */
+const monthsEl = document.getElementById("ciMonths");
+const rowsEl   = document.getElementById("ciRows");
+const labelsEl = document.getElementById("ciLabels");
+const scrollEl = document.getElementById("ciScroll");
+const todayEl  = document.getElementById("ciToday");
+
+/* ===== Render ===== */
+function render() {
+  // header months (repeat x3 for loop effect)
+  monthsEl.innerHTML = "";
+  for (let i=0;i<36;i++){
+    const d=document.createElement("div");
+    d.textContent = MONTHS[i%12];
+    monthsEl.appendChild(d);
+  }
+
+  // left labels
+  labelsEl.innerHTML = "";
+  DISCIPLINES.forEach(d=>{
+    const lab=document.createElement("div");
+    lab.className="ci-label";
+    lab.textContent=d.name;
+    labelsEl.appendChild(lab);
   });
 
-  // Build discipline rows
-  calendarBody.innerHTML = "";
+  // rows (grid of 36 columns) + bars repeated across 3 copies
+  rowsEl.innerHTML = "";
   const startOfYear = new Date(new Date().getFullYear(), 0, 1);
-  const endOfYear = new Date(new Date().getFullYear(), 11, 31);
-  const totalMs = endOfYear - startOfYear;
+  const endOfYear   = new Date(new Date().getFullYear(), 11, 31);
+  const yearMs = endOfYear - startOfYear;
 
-  cycleRanges.forEach(item => {
-    const rowWrapper = document.createElement("div");
-    rowWrapper.className = "calendar-row-wrapper";
+  DISCIPLINES.forEach(d=>{
+    const row=document.createElement("div");
+    row.className="ci-row";
+    // grid cells only for vertical month separators (visual)
+    for (let i=0;i<36;i++){
+      const c=document.createElement("div");
+      c.className="ci-cell";
+      row.appendChild(c);
+    }
+    // add bars
+    d.ranges.forEach(r=>{
+      const s=new Date(r.start), e=new Date(r.end);
+      let sRatio=(s-startOfYear)/yearMs, eRatio=(e-startOfYear)/yearMs;
+      if (eRatio < sRatio) eRatio += 1; // if it ever crosses year end
 
-    const label = document.createElement("div");
-    label.className = "discipline-cell";
-    label.textContent = item.discipline;
-    rowWrapper.appendChild(label);
-
-    const timeline = document.createElement("div");
-    timeline.className = "timeline-cell";
-    const grid = document.createElement("div");
-    grid.className = "timeline-grid";
-    timeline.appendChild(grid);
-
-    // Add highlight bars
-    item.ranges.forEach(r => {
-      const s = new Date(r.start);
-      const e = new Date(r.end);
-      const startRatio = (s - startOfYear) / totalMs;
-      const endRatio = (e - startOfYear) / totalMs;
-      const highlight = document.createElement("div");
-      highlight.className = "highlight";
-      highlight.style.left = `${startRatio * 100}%`;
-      highlight.style.width = `${(endRatio - startRatio) * 100}%`;
-      timeline.appendChild(highlight);
+      for (let copy=0; copy<3; copy++){
+        const bar=document.createElement("div");
+        bar.className="ci-bar";
+        const leftPct = (sRatio*100) + copy*100;
+        const widthPct = (eRatio - sRatio)*100;
+        bar.style.left  = `calc(${leftPct}% )`;
+        bar.style.width = `${widthPct}%`;
+        row.appendChild(bar);
+      }
     });
-
-    rowWrapper.appendChild(timeline);
-    calendarBody.appendChild(rowWrapper);
+    rowsEl.appendChild(row);
   });
 
-  updateTodayLine();
+  // place today's line in the middle (copy #2) so you start centered
+  positionTodayLine();
+  // center scroll to the middle copy
+  requestAnimationFrame(()=> {
+    const oneYearWidth = monthsEl.scrollWidth / 3;
+    scrollEl.scrollLeft = oneYearWidth; // middle copy
+  });
 }
 
-// ----- Today Line -----
-function updateTodayLine() {
+function positionTodayLine(){
   const now = new Date();
-  const startOfYear = new Date(now.getFullYear(), 0, 1);
-  const endOfYear = new Date(now.getFullYear(), 11, 31);
-  const ratio = (now - startOfYear) / (endOfYear - startOfYear);
-  const totalWidth = monthHeader.offsetWidth;
-  todayLine.style.left = `${160 + ratio * totalWidth}px`; // +160 for fixed column width
+  const y0  = new Date(now.getFullYear(),0,1);
+  const y1  = new Date(now.getFullYear(),11,31);
+  const ratio = (now - y0) / (y1 - y0); // 0..1 across one year
+  const oneYearWidth = monthsEl.scrollWidth / 3;
+  const x = (ratio * oneYearWidth) + oneYearWidth; // put in middle copy
+  todayEl.style.left = `${x}px`;
 }
 
-// ----- Drag Scroll -----
-const calendarWrapper = document.getElementById("calendarWrapper");
-let isDown = false;
-let startX;
-let scrollLeft;
+/* ===== Infinite Loop Handling ===== */
+function keepLooping(){
+  const oneYearWidth = monthsEl.scrollWidth / 3;
+  // when the scroll passes beyond middle ± 0.5 year, snap back within middle copy
+  if (scrollEl.scrollLeft < oneYearWidth*0.5){
+    scrollEl.scrollLeft += oneYearWidth;
+  } else if (scrollEl.scrollLeft > oneYearWidth*1.5){
+    scrollEl.scrollLeft -= oneYearWidth;
+  }
+  requestAnimationFrame(keepLooping);
+}
 
-calendarWrapper.addEventListener('mousedown', (e) => {
-  isDown = true;
-  calendarWrapper.classList.add('dragging');
-  startX = e.pageX - calendarWrapper.offsetLeft;
-  scrollLeft = calendarWrapper.scrollLeft;
+/* ===== Drag + Wheel scroll (desktop) ===== */
+let isDown=false, startX=0, startLeft=0;
+scrollEl.addEventListener("mousedown",(e)=>{
+  isDown=true; scrollEl.classList.add("dragging");
+  startX = e.pageX; startLeft = scrollEl.scrollLeft;
 });
-
-calendarWrapper.addEventListener('mouseleave', () => {
-  isDown = false;
-  calendarWrapper.classList.remove('dragging');
-});
-
-calendarWrapper.addEventListener('mouseup', () => {
-  isDown = false;
-  calendarWrapper.classList.remove('dragging');
-});
-
-calendarWrapper.addEventListener('mousemove', (e) => {
-  if (!isDown) return;
+scrollEl.addEventListener("mouseup",()=>{ isDown=false; scrollEl.classList.remove("dragging"); });
+scrollEl.addEventListener("mouseleave",()=>{ isDown=false; scrollEl.classList.remove("dragging"); });
+scrollEl.addEventListener("mousemove",(e)=>{
+  if(!isDown) return;
   e.preventDefault();
-  const x = e.pageX - calendarWrapper.offsetLeft;
-  const walk = (x - startX);
-  calendarWrapper.scrollLeft = scrollLeft - walk;
+  const dx = e.pageX - startX;
+  scrollEl.scrollLeft = startLeft - dx;
 });
+// vertical wheels/trackpads scroll horizontally
+scrollEl.addEventListener("wheel",(e)=>{
+  if(Math.abs(e.deltaY) >= Math.abs(e.deltaX)){
+    e.preventDefault();
+    scrollEl.scrollLeft += e.deltaY;
+  }
+},{passive:false});
 
-// ----- Arrow Buttons -----
-document.getElementById("prevBtn").addEventListener("click", () => {
-  calendarWrapper.scrollBy({ left: -300, behavior: "smooth" });
-});
-document.getElementById("nextBtn").addEventListener("click", () => {
-  calendarWrapper.scrollBy({ left: 300, behavior: "smooth" });
-});
+/* ===== Init ===== */
+render();
+setInterval(positionTodayLine, 60000); // keep red line current
+keepLooping();
 
-// ----- Init -----
-renderCalendar();
-setInterval(updateTodayLine, 60000);
+/* Buttons */
+document.getElementById("prevBtn").addEventListener("click",()=>scrollEl.scrollBy({left:-300,behavior:"smooth"}));
+document.getElementById("nextBtn").addEventListener("click",()=>scrollEl.scrollBy({left:300,behavior:"smooth"}));
 </script>
 
 
