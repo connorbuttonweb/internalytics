@@ -173,34 +173,44 @@ const cycleRanges = [
   }
 ];
 
+const MONTH_NAMES = [
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+];
+
+// Render the repeating 12-month loop centered on current month
 function renderCalendar(offset = 0) {
   const now = new Date();
-  const base = new Date(now.getFullYear(), now.getMonth() + offset - 2, 1);
+  const currentIndex = now.getMonth();
+  const visibleCount = 5;
+  const startIndex = (currentIndex + offset - 2 + 12) % 12;
+
   const months = [];
-  for (let i = 0; i < 5; i++) {
-    months.push(new Date(base.getFullYear(), base.getMonth() + i, 1));
+  for (let i = 0; i < visibleCount; i++) {
+    months.push(MONTH_NAMES[(startIndex + i) % 12]);
   }
 
+  // Reset grid
   calendarGrid.innerHTML = "";
 
-  // Header row
+  // Header row (no years)
   const header = document.createElement("div");
   header.className = "calendar-month-header";
   months.forEach(m => {
     const cell = document.createElement("div");
-    cell.textContent = m.toLocaleString("default", { month: "long", year: "numeric" });
+    cell.textContent = m;
     header.appendChild(cell);
   });
   calendarGrid.appendChild(header);
 
-  // Compute today position
+  // Base timeline (full year)
+  const startOfYear = new Date(now.getFullYear(), 0, 1);
+  const endOfYear = new Date(now.getFullYear(), 11, 31);
+  const totalYearDays = (endOfYear - startOfYear);
+
+  // Compute “today” relative to year progress
   const today = new Date();
-  const totalDays = months.reduce((sum, m) => sum + new Date(m.getFullYear(), m.getMonth() + 1, 0).getDate(), 0);
-  const startOfGrid = months[0];
-  const endOfGrid = new Date(months[4].getFullYear(), months[4].getMonth() + 1, 0);
-  const todayRatio = today >= startOfGrid && today <= endOfGrid
-    ? (today - startOfGrid) / (endOfGrid - startOfGrid)
-    : null;
+  const todayRatio = (today - startOfYear) / totalYearDays;
 
   // Discipline rows
   cycleRanges.forEach(item => {
@@ -211,55 +221,55 @@ function renderCalendar(offset = 0) {
     disciplineCell.textContent = item.discipline;
     row.appendChild(disciplineCell);
 
+    // 5 months of cells
     months.forEach(() => {
       const cell = document.createElement("div");
       cell.className = "calendar-cell";
       row.appendChild(cell);
     });
 
-    // Add highlights
+    // Highlights (projected onto the looping timeline)
     item.ranges.forEach(r => {
       const s = new Date(r.start);
       const e = new Date(r.end);
-      if (e < startOfGrid || s > endOfGrid) return;
-      const clampedStart = s < startOfGrid ? startOfGrid : s;
-      const clampedEnd = e > endOfGrid ? endOfGrid : e;
-      const leftRatio = (clampedStart - startOfGrid) / (endOfGrid - startOfGrid);
-      const widthRatio = (clampedEnd - clampedStart) / (endOfGrid - startOfGrid);
-
+      const sRatio = (s - startOfYear) / totalYearDays;
+      const eRatio = (e - startOfYear) / totalYearDays;
       const highlight = document.createElement("div");
       highlight.className = "highlight";
-      highlight.style.left = `calc(${leftRatio * 100}% + 150px)`;
-      highlight.style.width = `calc(${widthRatio * 100}% - 2px)`;
+
+      // Map to our 5-month visual band (wrap if crossing December)
+      let left = sRatio * 100;
+      let width = (eRatio - sRatio) * 100;
+      if (width < 0) width += 100; // wraparound correction
+      highlight.style.left = `calc(${left}% + 150px)`;
+      highlight.style.width = `calc(${width}% - 2px)`;
       row.appendChild(highlight);
     });
 
     calendarGrid.appendChild(row);
   });
 
-  // Today marker
-  if (todayRatio !== null) {
-    const todayLine = document.createElement("div");
-    todayLine.className = "today-line";
-    todayLine.style.left = `calc(${todayRatio * 100}% + 150px)`;
-    calendarGrid.appendChild(todayLine);
-  }
+  // Today line — wraps seamlessly around edge
+  const todayLine = document.createElement("div");
+  todayLine.className = "today-line";
+  todayLine.style.left = `calc(${todayRatio * 100}% + 150px)`;
+  calendarGrid.appendChild(todayLine);
 }
 
-// Navigation buttons
+// Buttons
 document.getElementById("prevBtn").addEventListener("click", () => {
-  currentMonthOffset -= 1;
+  currentMonthOffset = (currentMonthOffset - 1 + 12) % 12;
   renderCalendar(currentMonthOffset);
 });
 document.getElementById("nextBtn").addEventListener("click", () => {
-  currentMonthOffset += 1;
+  currentMonthOffset = (currentMonthOffset + 1) % 12;
   renderCalendar(currentMonthOffset);
 });
 
-// --- Swipe / touch support ---
+// --- Touch swipe (mobile) ---
 let touchStartX = 0;
 let touchEndX = 0;
-let swipeThreshold = 60; // px distance to trigger month shift
+const swipeThreshold = 60;
 
 calendarWrapper.addEventListener("touchstart", (e) => {
   touchStartX = e.changedTouches[0].screenX;
@@ -272,16 +282,43 @@ calendarWrapper.addEventListener("touchmove", (e) => {
 calendarWrapper.addEventListener("touchend", () => {
   const deltaX = touchEndX - touchStartX;
   if (Math.abs(deltaX) > swipeThreshold) {
-    if (deltaX < 0) {
-      currentMonthOffset += 1; // swipe left → next months
-    } else {
-      currentMonthOffset -= 1; // swipe right → previous months
-    }
+    if (deltaX < 0) currentMonthOffset = (currentMonthOffset + 1) % 12;
+    else currentMonthOffset = (currentMonthOffset - 1 + 12) % 12;
     renderCalendar(currentMonthOffset);
   }
 });
 
-// Initialize
+// --- Desktop click & drag scroll ---
+let isDown = false;
+let startX;
+let scrollLeft;
+
+calendarWrapper.addEventListener('mousedown', (e) => {
+  isDown = true;
+  calendarWrapper.classList.add('dragging');
+  startX = e.pageX - calendarWrapper.offsetLeft;
+  scrollLeft = calendarWrapper.scrollLeft;
+});
+
+calendarWrapper.addEventListener('mouseleave', () => {
+  isDown = false;
+  calendarWrapper.classList.remove('dragging');
+});
+
+calendarWrapper.addEventListener('mouseup', () => {
+  isDown = false;
+  calendarWrapper.classList.remove('dragging');
+});
+
+calendarWrapper.addEventListener('mousemove', (e) => {
+  if (!isDown) return;
+  e.preventDefault();
+  const x = e.pageX - calendarWrapper.offsetLeft;
+  const walk = (x - startX);
+  calendarWrapper.scrollLeft = scrollLeft - walk;
+});
+
+// Initialize render
 renderCalendar();
 </script>
 
