@@ -1,0 +1,22 @@
+[
+  {
+    "title": "Design Brief",
+    "type": "pdf",
+    "url": "Internalytics_Design_Brief.pdf"
+  },
+  {
+    "title": "Website Strategy",
+    "type": "pdf",
+    "url": "Internalytics_Website_Strategy_Brief.pdf"
+  },
+  {
+    "title": "Internship Tracker (Template)",
+    "type": "xlsx",
+    "url": "tracker-template.xlsx"
+  },
+  {
+    "title": "Networking Log (CSV)",
+    "type": "csv",
+    "url": "networking-log.csv"
+  }
+]

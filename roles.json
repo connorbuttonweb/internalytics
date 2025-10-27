@@ -1,0 +1,41 @@
+[
+  {
+    "title": "Strategy Intern \u2014 Toronto",
+    "path": "consulting",
+    "company": "Monitor Deloitte",
+    "cycle": "Fall \u2192 Winter",
+    "status": "Open",
+    "why": "Analytical case work, problem structuring, and client-ready deliverables.",
+    "tags": [
+      "Consulting",
+      "Apps: Open"
+    ],
+    "link": "https://example.com/role/strategy-intern"
+  },
+  {
+    "title": "Product Strategy \u2014 Student",
+    "path": "product",
+    "company": "TechCo",
+    "cycle": "Winter",
+    "status": "Interview",
+    "why": "Opportunity mapping, KPI stewardship, and cross-functional experiments.",
+    "tags": [
+      "Product",
+      "Apps: Closed"
+    ],
+    "link": "https://example.com/role/product-strategy-student"
+  },
+  {
+    "title": "Corporate Finance \u2014 Summer Analyst",
+    "path": "finance",
+    "company": "IBank",
+    "cycle": "Rolling",
+    "status": "Offer",
+    "why": "Valuation basics, dashboards, and executive-ready insights.",
+    "tags": [
+      "Finance",
+      "Closing Soon"
+    ],
+    "link": "https://example.com/role/cf-summer-analyst"
+  }
+]
