@@ -69,257 +69,236 @@
     </div>
   </section>
 
- <!-- Cycle Intelligence Interactive Calendar (Swipe-enabled) -->
+ <!-- Cycle Intelligence Desktop Scrollable Calendar -->
 <section id="cycle-intelligence" class="section headroom">
   <div class="container">
     <div class="row" style="justify-content:space-between;align-items:center;">
-      <h2 class="m-0">Cycle Intelligence — Calendar</h2>
+      <h2 class="m-0">Cycle Intelligence — Timeline</h2>
       <div>
         <button id="prevBtn" class="btn ghost small">←</button>
         <button id="nextBtn" class="btn ghost small">→</button>
       </div>
     </div>
-    <p class="caption mt-2">View internship cycles across disciplines, five months at a time. Swipe to navigate on mobile.</p>
+    <p class="caption mt-2">Interactive recruiting timeline by discipline. Click and drag to explore months.</p>
 
-    <div class="calendar-wrapper mt-4" id="calendarWrapper">
-      <div class="calendar-grid" id="calendarGrid">
-        <!-- Calendar dynamically rendered -->
+    <div class="calendar-container mt-4">
+      <div class="calendar-fixed-col" id="disciplineLabels"></div>
+      <div class="calendar-scroll-area" id="calendarScroll">
+        <div class="calendar-grid" id="calendarGrid"></div>
+        <div class="today-line" id="todayLine"></div>
       </div>
     </div>
   </div>
 </section>
 
 <style>
-.calendar-wrapper {
-  overflow-x: auto;
+/* Layout */
+.calendar-container {
+  display: flex;
   position: relative;
+  height: auto;
   border: 1px solid var(--border-color, #ddd);
   border-radius: 12px;
-  padding-bottom: 10px;
-  touch-action: pan-y;
+  overflow: hidden;
 }
+
+.calendar-fixed-col {
+  flex: 0 0 160px;
+  background: var(--bg-subtle, #fafafa);
+  border-right: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+  z-index: 5;
+}
+
+.calendar-fixed-col .discipline {
+  font-weight: 600;
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+}
+
+.calendar-scroll-area {
+  position: relative;
+  flex: 1;
+  overflow: hidden; /* hides scrollbar */
+  cursor: grab;
+}
+
+.calendar-scroll-area.dragging {
+  cursor: grabbing;
+}
+
 .calendar-grid {
   display: grid;
   grid-template-rows: auto;
+  width: 2400px; /* base width, gives horizontal space */
   position: relative;
-  width: max-content;
-  min-width: 100%;
-  font-size: 0.85rem;
-  user-select: none;
 }
+
 .calendar-month-header {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(12, 1fr);
   text-align: center;
   font-weight: 600;
   background: var(--bg-subtle, #f7f7f7);
   padding: 0.5rem 0;
   border-bottom: 1px solid #ddd;
 }
+
 .calendar-row {
   display: grid;
-  grid-template-columns: 150px repeat(5, 1fr);
+  grid-template-columns: repeat(12, 1fr);
   align-items: center;
+  height: 42px;
   border-bottom: 1px solid #eee;
   position: relative;
 }
-.calendar-row .discipline {
-  font-weight: 600;
-  padding-left: 8px;
-}
-.calendar-cell {
-  height: 40px;
-  border-left: 1px solid #eee;
-  position: relative;
-}
+
 .highlight {
   position: absolute;
-  top: 4px;
-  bottom: 4px;
+  height: 36px;
   background: rgba(0, 200, 0, 0.25);
   border-radius: 4px;
+  top: 3px;
 }
+
 .today-line {
   position: absolute;
   top: 0;
   bottom: 0;
   width: 2px;
   background: red;
+  z-index: 10;
   pointer-events: none;
 }
 </style>
 
 <script>
+// ---------- Config ----------
 const calendarGrid = document.getElementById("calendarGrid");
-const calendarWrapper = document.getElementById("calendarWrapper");
-let currentMonthOffset = 0;
-
-const cycleRanges = [
-  {
-    discipline: "Finance",
-    ranges: [{ start: "2025-09-01", end: "2025-11-15" }]
-  },
-  {
-    discipline: "Accounting",
-    ranges: [{ start: "2025-07-01", end: "2025-09-30" }]
-  },
-  {
-    discipline: "Consulting",
-    ranges: [{ start: "2025-08-15", end: "2025-10-31" }]
-  },
-  {
-    discipline: "Real Estate",
-    ranges: [{ start: "2025-09-10", end: "2025-12-05" }]
-  }
-];
+const calendarScroll = document.getElementById("calendarScroll");
+const disciplineLabels = document.getElementById("disciplineLabels");
+const todayLine = document.getElementById("todayLine");
 
 const MONTH_NAMES = [
-  "January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December"
+  "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
 ];
 
-// Render the repeating 12-month loop centered on current month
-function renderCalendar(offset = 0) {
-  const now = new Date();
-  const currentIndex = now.getMonth();
-  const visibleCount = 5;
-  const startIndex = (currentIndex + offset - 2 + 12) % 12;
+const cycleRanges = [
+  { discipline: "Finance",     ranges: [{ start: "2025-09-01", end: "2025-11-15" }] },
+  { discipline: "Accounting",  ranges: [{ start: "2025-07-01", end: "2025-09-30" }] },
+  { discipline: "Consulting",  ranges: [{ start: "2025-08-15", end: "2025-10-31" }] },
+  { discipline: "Real Estate", ranges: [{ start: "2025-09-10", end: "2025-12-05" }] }
+];
 
-  const months = [];
-  for (let i = 0; i < visibleCount; i++) {
-    months.push(MONTH_NAMES[(startIndex + i) % 12]);
-  }
-
-  // Reset grid
+// ---------- Rendering ----------
+function renderCalendar() {
   calendarGrid.innerHTML = "";
+  disciplineLabels.innerHTML = "";
 
-  // Header row (no years)
+  // Header row for months
   const header = document.createElement("div");
   header.className = "calendar-month-header";
-  months.forEach(m => {
+  MONTH_NAMES.forEach(month => {
     const cell = document.createElement("div");
-    cell.textContent = m;
+    cell.textContent = month;
     header.appendChild(cell);
   });
   calendarGrid.appendChild(header);
 
-  // Base timeline (full year)
-  const startOfYear = new Date(now.getFullYear(), 0, 1);
-  const endOfYear = new Date(now.getFullYear(), 11, 31);
-  const totalYearDays = (endOfYear - startOfYear);
+  const startOfYear = new Date(new Date().getFullYear(), 0, 1);
+  const endOfYear = new Date(new Date().getFullYear(), 11, 31);
+  const totalMs = endOfYear - startOfYear;
 
-  // Compute “today” relative to year progress
-  const today = new Date();
-  const todayRatio = (today - startOfYear) / totalYearDays;
-
-  // Discipline rows
+  // Rows for each discipline
   cycleRanges.forEach(item => {
     const row = document.createElement("div");
     row.className = "calendar-row";
-    const disciplineCell = document.createElement("div");
-    disciplineCell.className = "discipline";
-    disciplineCell.textContent = item.discipline;
-    row.appendChild(disciplineCell);
 
-    // 5 months of cells
-    months.forEach(() => {
+    // Create empty grid cells
+    MONTH_NAMES.forEach(() => {
       const cell = document.createElement("div");
-      cell.className = "calendar-cell";
       row.appendChild(cell);
     });
 
-    // Highlights (projected onto the looping timeline)
+    // Create discipline label (fixed column)
+    const label = document.createElement("div");
+    label.className = "discipline";
+    label.textContent = item.discipline;
+    disciplineLabels.appendChild(label);
+
+    // Add highlights for internship cycles
     item.ranges.forEach(r => {
       const s = new Date(r.start);
       const e = new Date(r.end);
-      const sRatio = (s - startOfYear) / totalYearDays;
-      const eRatio = (e - startOfYear) / totalYearDays;
+      const startRatio = (s - startOfYear) / totalMs;
+      const endRatio = (e - startOfYear) / totalMs;
       const highlight = document.createElement("div");
       highlight.className = "highlight";
-
-      // Map to our 5-month visual band (wrap if crossing December)
-      let left = sRatio * 100;
-      let width = (eRatio - sRatio) * 100;
-      if (width < 0) width += 100; // wraparound correction
-      highlight.style.left = `calc(${left}% + 150px)`;
-      highlight.style.width = `calc(${width}% - 2px)`;
+      highlight.style.left = `${startRatio * 100}%`;
+      highlight.style.width = `${(endRatio - startRatio) * 100}%`;
       row.appendChild(highlight);
     });
 
     calendarGrid.appendChild(row);
   });
 
-  // Today line — wraps seamlessly around edge
-  const todayLine = document.createElement("div");
-  todayLine.className = "today-line";
-  todayLine.style.left = `calc(${todayRatio * 100}% + 150px)`;
-  calendarGrid.appendChild(todayLine);
+  updateTodayLine();
 }
 
-// Buttons
-document.getElementById("prevBtn").addEventListener("click", () => {
-  currentMonthOffset = (currentMonthOffset - 1 + 12) % 12;
-  renderCalendar(currentMonthOffset);
-});
-document.getElementById("nextBtn").addEventListener("click", () => {
-  currentMonthOffset = (currentMonthOffset + 1) % 12;
-  renderCalendar(currentMonthOffset);
-});
+// ---------- Today Line ----------
+function updateTodayLine() {
+  const now = new Date();
+  const startOfYear = new Date(now.getFullYear(), 0, 1);
+  const endOfYear = new Date(now.getFullYear(), 11, 31);
+  const totalMs = endOfYear - startOfYear;
+  const ratio = (now - startOfYear) / totalMs;
+  const totalWidth = calendarGrid.offsetWidth;
+  todayLine.style.left = `${ratio * totalWidth}px`;
+}
 
-// --- Touch swipe (mobile) ---
-let touchStartX = 0;
-let touchEndX = 0;
-const swipeThreshold = 60;
-
-calendarWrapper.addEventListener("touchstart", (e) => {
-  touchStartX = e.changedTouches[0].screenX;
-}, { passive: true });
-
-calendarWrapper.addEventListener("touchmove", (e) => {
-  touchEndX = e.changedTouches[0].screenX;
-}, { passive: true });
-
-calendarWrapper.addEventListener("touchend", () => {
-  const deltaX = touchEndX - touchStartX;
-  if (Math.abs(deltaX) > swipeThreshold) {
-    if (deltaX < 0) currentMonthOffset = (currentMonthOffset + 1) % 12;
-    else currentMonthOffset = (currentMonthOffset - 1 + 12) % 12;
-    renderCalendar(currentMonthOffset);
-  }
-});
-
-// --- Desktop click & drag scroll ---
+// ---------- Scroll / Drag Support ----------
 let isDown = false;
 let startX;
 let scrollLeft;
 
-calendarWrapper.addEventListener('mousedown', (e) => {
+calendarScroll.addEventListener('mousedown', (e) => {
   isDown = true;
-  calendarWrapper.classList.add('dragging');
-  startX = e.pageX - calendarWrapper.offsetLeft;
-  scrollLeft = calendarWrapper.scrollLeft;
+  calendarScroll.classList.add('dragging');
+  startX = e.pageX - calendarScroll.offsetLeft;
+  scrollLeft = calendarScroll.scrollLeft;
 });
 
-calendarWrapper.addEventListener('mouseleave', () => {
+calendarScroll.addEventListener('mouseleave', () => {
   isDown = false;
-  calendarWrapper.classList.remove('dragging');
+  calendarScroll.classList.remove('dragging');
 });
 
-calendarWrapper.addEventListener('mouseup', () => {
+calendarScroll.addEventListener('mouseup', () => {
   isDown = false;
-  calendarWrapper.classList.remove('dragging');
+  calendarScroll.classList.remove('dragging');
 });
 
-calendarWrapper.addEventListener('mousemove', (e) => {
+calendarScroll.addEventListener('mousemove', (e) => {
   if (!isDown) return;
   e.preventDefault();
-  const x = e.pageX - calendarWrapper.offsetLeft;
+  const x = e.pageX - calendarScroll.offsetLeft;
   const walk = (x - startX);
-  calendarWrapper.scrollLeft = scrollLeft - walk;
+  calendarScroll.scrollLeft = scrollLeft - walk;
 });
 
-// Initialize render
+// ---------- Arrow Button Scrolling ----------
+document.getElementById("prevBtn").addEventListener("click", () => {
+  calendarScroll.scrollBy({ left: -300, behavior: "smooth" });
+});
+document.getElementById("nextBtn").addEventListener("click", () => {
+  calendarScroll.scrollBy({ left: 300, behavior: "smooth" });
+});
+
+// ---------- Initialize ----------
 renderCalendar();
+setInterval(updateTodayLine, 60000); // refresh every minute
 </script>
 
   <!-- Profession Feature Grid -->
