@@ -1,33 +1,193 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Internalytics — Internship Intelligence</title>
-  <link rel="stylesheet" href="main.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Internalytics — Recruiting, decoded.</title>
+  <link rel="stylesheet" href="main.css" />
+  <meta name="description" content="Analyze internship cycles, uncover timing patterns, and act with insight. Internalytics focuses on insight over listings." />
 </head>
 <body>
+  <!-- Header -->
   <header class="header">
     <div class="container inner">
-      <a href="index.html"><strong>Internalytics</strong></a>
-      <nav class="nav">
-        <a href="opportunities.html">Opportunities</a>
+      <a href="index.html" class="row" style="gap:.6rem;text-decoration:none">
+        <img src="ChatGPT Image Oct 27, 2025, 05_41_22 PM.png" alt="Internalytics mark" width="28" height="28" style="border-radius:6px;box-shadow:var(--shadow-sm)" />
+        <strong style="color:var(--text-strong)">Internalytics</strong>
+      </a>
+      <nav class="nav" aria-label="Primary">
+        <a href="radar.html">Opportunity Radar</a>
+        <a href="cycle.html">Cycle Intelligence</a>
         <a href="playbooks.html">Playbooks</a>
+        <a href="networking.html">Networking Hub</a>
         <a href="tracker.html">Tracker</a>
-        <a href="networking.html">Networking</a>
-        <a href="documents.html">Documents</a>
+        <a href="about.html">About</a>
+        <a class="cta" href="account.html">Sign in</a>
       </nav>
     </div>
   </header>
+
+  <!-- Hero -->
   <section class="hero">
-    <div class="container">
-      <h1>Internship Intelligence for Students</h1>
-      <p>Built to act differently than a job board — an information engine for getting hired.</p>
+    <div class="container content">
+      <div class="row" style="gap:1rem;align-items:center">
+        <img src="ChatGPT Image Oct 27, 2025, 05_41_22 PM.png" alt="Internalytics logo" width="64" height="64" style="border-radius:16px;box-shadow:var(--shadow-md)" />
+        <div>
+          <h1>Recruiting, decoded.</h1>
+          <p>Analyze internship cycles, uncover timing patterns, and act with insight across Finance, Accounting, Consulting, and Real Estate.</p>
+        </div>
+      </div>
+      <div class="actions">
+        <a class="btn" href="#cycle-intelligence">See Timeline</a>
+        <a class="btn secondary" href="radar.html">Explore Radar</a>
+        <a class="btn ghost" href="account.html">Sign in</a>
+      </div>
     </div>
   </section>
+
+  <!-- Snapshot Analytics Bar -->
+  <section class="section">
+    <div class="container">
+      <div class="analytics-bar" role="region" aria-label="Snapshot KPIs">
+        <div class="kpi">
+          <div class="value" id="kpi-open">42</div>
+          <div class="label">Open applications now</div>
+        </div>
+        <div class="kpi">
+          <div class="value" id="kpi-interview">18</div>
+          <div class="label">Interview windows active</div>
+        </div>
+        <div class="kpi">
+          <div class="value" id="kpi-offer">6</div>
+          <div class="label">Offer waves this week</div>
+        </div>
+        <div class="kpi">
+          <div class="value" id="kpi-updated">Today</div>
+          <div class="label">Last data refresh</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cycle Intelligence Preview -->
+  <section id="cycle-intelligence" class="section headroom">
+    <div class="container">
+      <div class="row" style="justify-content:space-between">
+        <h2 class="m-0">Cycle Intelligence — Preview</h2>
+        <div class="legend">
+          <span class="dot open"></span><small>Open</small>
+          <span class="dot interview"></span><small>Interview</small>
+          <span class="dot offer"></span><small>Offer</small>
+        </div>
+      </div>
+      <p class="caption mt-2">Subway‑style Gantt of recruiting phases. Filter by profession and compare timing across firms.</p>
+
+      <div class="chips mt-4" role="group" aria-label="Profession filters">
+        <button class="chip finance" data-active="true">Finance</button>
+        <button class="chip accounting" data-active="true">Accounting</button>
+        <button class="chip consulting" data-active="true">Consulting</button>
+        <button class="chip realestate" data-active="true">Real&nbsp;Estate</button>
+      </div>
+
+      <div class="cyclemap mt-4" role="region" aria-label="Recruiting timeline lanes">
+        <!-- Rows will be injected by JS using the JSON below -->
+        <div id="cycle-rows" class="col"></div>
+      </div>
+
+      <div class="row mt-4">
+        <a class="btn secondary" href="cycle.html">Expand Full Map</a>
+        <a class="btn neutral" href="cycle.html#export">Export (.ics / .png)</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Profession Feature Grid -->
+  <section class="section">
+    <div class="container grid cols-4">
+      <a class="card lift feature-card finance" href="radar.html?profession=finance">
+        <div class="title">Finance</div>
+        <div class="meta">IB, S&T, AM timelines</div>
+      </a>
+      <a class="card lift feature-card accounting" href="radar.html?profession=accounting">
+        <div class="title">Accounting</div>
+        <div class="meta">Assurance & Tax cycles</div>
+      </a>
+      <a class="card lift feature-card consulting" href="radar.html?profession=consulting">
+        <div class="title">Consulting</div>
+        <div class="meta">Strategy & Ops recruiting</div>
+      </a>
+      <a class="card lift feature-card realestate" href="radar.html?profession=realestate">
+        <div class="title">Real Estate</div>
+        <div class="meta">Investment & Dev tracks</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- Footer -->
   <footer class="footer">
-    <div class="container inner"><small>© <span id="year"></span> Internalytics.</small></div>
+    <div class="container inner">
+      <small>Built for students who think in data.</small>
+      <small>© <span id="year"></span> Internalytics</small>
+    </div>
   </footer>
-  <script src="app.js"></script>
+
+  <!-- Minimal JS: JSON-driven CycleMap preview (MVP, static data) -->
+  <script>
+    // Example static JSON dataset for the preview (Phase 1 / MVP)
+    const cycleData = [
+      { role: "Finance — Bulge Bracket", phases: [
+        { type: "open", start: 5, end: 25 },      // day-of-year percentages (0–100)
+        { type: "interview", start: 26, end: 45 },
+        { type: "offer", start: 46, end: 55 },
+      ]},
+      { role: "Accounting — Big 4", phases: [
+        { type: "open", start: 10, end: 30 },
+        { type: "interview", start: 34, end: 52 },
+        { type: "offer", start: 58, end: 65 },
+      ]},
+      { role: "Consulting — MBB/Boutique", phases: [
+        { type: "open", start: 15, end: 35 },
+        { type: "interview", start: 40, end: 60 },
+        { type: "offer", start: 64, end: 75 },
+      ]},
+      { role: "Real Estate — IM/Dev", phases: [
+        { type: "open", start: 20, end: 38 },
+        { type: "interview", start: 42, end: 58 },
+        { type: "offer", start: 63, end: 72 },
+      ]},
+    ];
+
+    const rowsHost = document.getElementById("cycle-rows");
+
+    function renderCycleRows(data) {
+      rowsHost.innerHTML = "";
+      data.forEach(item => {
+        const row = document.createElement("div");
+        row.className = "row";
+        const role = document.createElement("div");
+        role.className = "role";
+        role.textContent = item.role;
+        const lane = document.createElement("div");
+        lane.className = "lane";
+        // add phases
+        item.phases.forEach(p => {
+          const el = document.createElement("div");
+          el.className = "phase " + p.type;
+          el.style.left = p.start + "%";
+          el.style.width = (p.end - p.start) + "%";
+          el.title = p.type.toUpperCase() + " • " + p.start + "%–" + p.end + "%";
+          el.setAttribute("aria-label", el.title);
+          lane.appendChild(el);
+        });
+        row.appendChild(role);
+        row.appendChild(lane);
+        rowsHost.appendChild(row);
+      });
+    }
+    renderCycleRows(cycleData);
+
+    // Year in footer
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
