@@ -1,0 +1,7 @@
+body { margin: 0; font-family: system-ui, Arial, sans-serif; line-height: 1.5; }
+.site-header { display:flex; justify-content:space-between; align-items:center; padding:16px; border-bottom:1px solid #eee; }
+.nav a { margin-left:12px; text-decoration:none; }
+.hero { padding:40px 16px; }
+.cards { display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:16px; padding:16px; }
+.card { border:1px solid #eee; padding:16px; border-radius:12px; text-decoration:none; color:inherit; }
+.card:hover { box-shadow:0 4px 20px rgba(0,0,0,.06); }
