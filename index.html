@@ -12,7 +12,7 @@
   <header class="header">
     <div class="container inner">
       <a href="index.html" class="row" style="gap:.6rem;text-decoration:none">
-        <img src="ChatGPT Image Oct 27, 2025, 05_41_22 PM.png" alt="Internalytics mark" width="28" height="28" style="border-radius:6px;box-shadow:var(--shadow-sm)" />
+        <img src="images/logo.png" alt="Internalytics mark" width="28" height="28" style="border-radius:6px;box-shadow:var(--shadow-sm)" />
         <strong style="color:var(--text-strong)">Internalytics</strong>
       </a>
       <nav class="nav" aria-label="Primary">
@@ -31,7 +31,7 @@
   <section class="hero">
     <div class="container content">
       <div class="row" style="gap:1rem;align-items:center">
-        <img src="ChatGPT Image Oct 27, 2025, 05_41_22 PM.png" alt="Internalytics logo" width="64" height="64" style="border-radius:16px;box-shadow:var(--shadow-md)" />
+        <img src="images/logo.png" alt="Internalytics logo" width="64" height="64" style="border-radius:16px;box-shadow:var(--shadow-md)" />
         <div>
           <h1>Recruiting, decoded.</h1>
           <p>Analyze internship cycles, uncover timing patterns, and act with insight across Finance, Accounting, Consulting, and Real Estate.</p>
@@ -69,37 +69,221 @@
     </div>
   </section>
 
-  <!-- Cycle Intelligence Preview -->
-  <section id="cycle-intelligence" class="section headroom">
-    <div class="container">
-      <div class="row" style="justify-content:space-between">
-        <h2 class="m-0">Cycle Intelligence — Preview</h2>
-        <div class="legend">
-          <span class="dot open"></span><small>Open</small>
-          <span class="dot interview"></span><small>Interview</small>
-          <span class="dot offer"></span><small>Offer</small>
-        </div>
-      </div>
-      <p class="caption mt-2">Subway‑style Gantt of recruiting phases. Filter by profession and compare timing across firms.</p>
-
-      <div class="chips mt-4" role="group" aria-label="Profession filters">
-        <button class="chip finance" data-active="true">Finance</button>
-        <button class="chip accounting" data-active="true">Accounting</button>
-        <button class="chip consulting" data-active="true">Consulting</button>
-        <button class="chip realestate" data-active="true">Real&nbsp;Estate</button>
-      </div>
-
-      <div class="cyclemap mt-4" role="region" aria-label="Recruiting timeline lanes">
-        <!-- Rows will be injected by JS using the JSON below -->
-        <div id="cycle-rows" class="col"></div>
-      </div>
-
-      <div class="row mt-4">
-        <a class="btn secondary" href="cycle.html">Expand Full Map</a>
-        <a class="btn neutral" href="cycle.html#export">Export (.ics / .png)</a>
+ <!-- Cycle Intelligence Interactive Calendar (Swipe-enabled) -->
+<section id="cycle-intelligence" class="section headroom">
+  <div class="container">
+    <div class="row" style="justify-content:space-between;align-items:center;">
+      <h2 class="m-0">Cycle Intelligence — Calendar</h2>
+      <div>
+        <button id="prevBtn" class="btn ghost small">←</button>
+        <button id="nextBtn" class="btn ghost small">→</button>
       </div>
     </div>
-  </section>
+    <p class="caption mt-2">View internship cycles across disciplines, five months at a time. Swipe to navigate on mobile.</p>
+
+    <div class="calendar-wrapper mt-4" id="calendarWrapper">
+      <div class="calendar-grid" id="calendarGrid">
+        <!-- Calendar dynamically rendered -->
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+.calendar-wrapper {
+  overflow-x: auto;
+  position: relative;
+  border: 1px solid var(--border-color, #ddd);
+  border-radius: 12px;
+  padding-bottom: 10px;
+  touch-action: pan-y;
+}
+.calendar-grid {
+  display: grid;
+  grid-template-rows: auto;
+  position: relative;
+  width: max-content;
+  min-width: 100%;
+  font-size: 0.85rem;
+  user-select: none;
+}
+.calendar-month-header {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  text-align: center;
+  font-weight: 600;
+  background: var(--bg-subtle, #f7f7f7);
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #ddd;
+}
+.calendar-row {
+  display: grid;
+  grid-template-columns: 150px repeat(5, 1fr);
+  align-items: center;
+  border-bottom: 1px solid #eee;
+  position: relative;
+}
+.calendar-row .discipline {
+  font-weight: 600;
+  padding-left: 8px;
+}
+.calendar-cell {
+  height: 40px;
+  border-left: 1px solid #eee;
+  position: relative;
+}
+.highlight {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  background: rgba(0, 200, 0, 0.25);
+  border-radius: 4px;
+}
+.today-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: red;
+  pointer-events: none;
+}
+</style>
+
+<script>
+const calendarGrid = document.getElementById("calendarGrid");
+const calendarWrapper = document.getElementById("calendarWrapper");
+let currentMonthOffset = 0;
+
+const cycleRanges = [
+  {
+    discipline: "Finance",
+    ranges: [{ start: "2025-09-01", end: "2025-11-15" }]
+  },
+  {
+    discipline: "Accounting",
+    ranges: [{ start: "2025-07-01", end: "2025-09-30" }]
+  },
+  {
+    discipline: "Consulting",
+    ranges: [{ start: "2025-08-15", end: "2025-10-31" }]
+  },
+  {
+    discipline: "Real Estate",
+    ranges: [{ start: "2025-09-10", end: "2025-12-05" }]
+  }
+];
+
+function renderCalendar(offset = 0) {
+  const now = new Date();
+  const base = new Date(now.getFullYear(), now.getMonth() + offset - 2, 1);
+  const months = [];
+  for (let i = 0; i < 5; i++) {
+    months.push(new Date(base.getFullYear(), base.getMonth() + i, 1));
+  }
+
+  calendarGrid.innerHTML = "";
+
+  // Header row
+  const header = document.createElement("div");
+  header.className = "calendar-month-header";
+  months.forEach(m => {
+    const cell = document.createElement("div");
+    cell.textContent = m.toLocaleString("default", { month: "long", year: "numeric" });
+    header.appendChild(cell);
+  });
+  calendarGrid.appendChild(header);
+
+  // Compute today position
+  const today = new Date();
+  const totalDays = months.reduce((sum, m) => sum + new Date(m.getFullYear(), m.getMonth() + 1, 0).getDate(), 0);
+  const startOfGrid = months[0];
+  const endOfGrid = new Date(months[4].getFullYear(), months[4].getMonth() + 1, 0);
+  const todayRatio = today >= startOfGrid && today <= endOfGrid
+    ? (today - startOfGrid) / (endOfGrid - startOfGrid)
+    : null;
+
+  // Discipline rows
+  cycleRanges.forEach(item => {
+    const row = document.createElement("div");
+    row.className = "calendar-row";
+    const disciplineCell = document.createElement("div");
+    disciplineCell.className = "discipline";
+    disciplineCell.textContent = item.discipline;
+    row.appendChild(disciplineCell);
+
+    months.forEach(() => {
+      const cell = document.createElement("div");
+      cell.className = "calendar-cell";
+      row.appendChild(cell);
+    });
+
+    // Add highlights
+    item.ranges.forEach(r => {
+      const s = new Date(r.start);
+      const e = new Date(r.end);
+      if (e < startOfGrid || s > endOfGrid) return;
+      const clampedStart = s < startOfGrid ? startOfGrid : s;
+      const clampedEnd = e > endOfGrid ? endOfGrid : e;
+      const leftRatio = (clampedStart - startOfGrid) / (endOfGrid - startOfGrid);
+      const widthRatio = (clampedEnd - clampedStart) / (endOfGrid - startOfGrid);
+
+      const highlight = document.createElement("div");
+      highlight.className = "highlight";
+      highlight.style.left = `calc(${leftRatio * 100}% + 150px)`;
+      highlight.style.width = `calc(${widthRatio * 100}% - 2px)`;
+      row.appendChild(highlight);
+    });
+
+    calendarGrid.appendChild(row);
+  });
+
+  // Today marker
+  if (todayRatio !== null) {
+    const todayLine = document.createElement("div");
+    todayLine.className = "today-line";
+    todayLine.style.left = `calc(${todayRatio * 100}% + 150px)`;
+    calendarGrid.appendChild(todayLine);
+  }
+}
+
+// Navigation buttons
+document.getElementById("prevBtn").addEventListener("click", () => {
+  currentMonthOffset -= 1;
+  renderCalendar(currentMonthOffset);
+});
+document.getElementById("nextBtn").addEventListener("click", () => {
+  currentMonthOffset += 1;
+  renderCalendar(currentMonthOffset);
+});
+
+// --- Swipe / touch support ---
+let touchStartX = 0;
+let touchEndX = 0;
+let swipeThreshold = 60; // px distance to trigger month shift
+
+calendarWrapper.addEventListener("touchstart", (e) => {
+  touchStartX = e.changedTouches[0].screenX;
+}, { passive: true });
+
+calendarWrapper.addEventListener("touchmove", (e) => {
+  touchEndX = e.changedTouches[0].screenX;
+}, { passive: true });
+
+calendarWrapper.addEventListener("touchend", () => {
+  const deltaX = touchEndX - touchStartX;
+  if (Math.abs(deltaX) > swipeThreshold) {
+    if (deltaX < 0) {
+      currentMonthOffset += 1; // swipe left → next months
+    } else {
+      currentMonthOffset -= 1; // swipe right → previous months
+    }
+    renderCalendar(currentMonthOffset);
+  }
+});
+
+// Initialize
+renderCalendar();
+</script>
 
   <!-- Profession Feature Grid -->
   <section class="section">
