@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Internalytics</title>
+
+  <!-- Global Styles -->
+  <link rel="stylesheet" href="main.css" />
+  <meta name="description" content="Internalytics — Recruiting, decoded." />
+</head>
+
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container inner">
+      <a href="index.html" class="row" style="gap:.6rem;text-decoration:none">
+        <img src="images/logo.png" alt="Internalytics mark"
+             width="28" height="28"
+             style="border-radius:6px;box-shadow:var(--shadow-sm)" />
+        <strong style="color:var(--text-strong)">Internalytics</strong>
+      </a>
+
+      <nav class="nav" aria-label="Primary navigation">
+        <a href="search.html">Search</a>
+        <a href="radar.html">Radar</a>
+        <a href="account.html" class="cta">Sign in</a>
+      </nav>
+    </div>
+  </header>
+
+
+  <!-- 👇 PAGE CONTENT STARTS HERE -->
+  <!-- Use this for every page -->
+  <main class="section headroom">
+    <div class="container">
+
+      <!-- Replace all of this with each page’s unique content -->
+      <h1>Page Title</h1>
+      <p class="caption">Optional subtitle or description lives here.</p>
+
+      <div class="card">
+        <p>Start adding your page-specific content inside containers, sections, grids, or cards.</p>
+      </div>
+
+    </div>
+
+    <!-- Careers Section-->
+        <section class="section headroom">
+        <div class="container">
+            <div class="card">
+            <h1>Your Internship Dashboard</h1>
+            <p class="caption">
+                These are the companies you’re tracking. You can change this list any time
+                on the <a href="careers.html">Careers</a> page.
+            </p>
+
+            <div id="dashboard-companies" class="dashboard-company-grid">
+                <!-- JS will insert selected companies here -->
+            </div>
+
+            <p class="caption subtle" id="dashboard-empty" style="display:none;">
+                You haven’t selected any companies yet. Go to the
+                <a href="careers.html">Careers directory</a> to add some.
+            </p>
+            </div>
+        </div>
+        </section>
+
+        <script src="assets/js/companies.js" defer></script>
+        <script src="assets/js/profile-dashboard.js" defer></script>
+
+    </main>
+  <!-- 👆 PAGE CONTENT ENDS HERE -->
+
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container inner">
+      <small>Built for students who think in data.</small>
+      <small>© <span id="year"></span> Internalytics</small>
+    </div>
+  </footer>
+
+
+  <!-- Minimal JS -->
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

@@ -697,3 +697,92 @@ p { margin: 0 0 var(--space-4); }
   body { background: #fff; color: #000; }
   .card, .cyclemap, .table { box-shadow: none !important; }
 }
+
+.company-checkbox-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  margin-top: var(--space-4);
+}
+
+.company-category h2 {
+  font-size: 1.1rem;
+  margin-bottom: var(--space-2);
+}
+
+.company-category-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.company-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--card-border);
+  cursor: pointer;
+}
+
+.company-row input[type="checkbox"] {
+  transform: scale(1.1);
+}
+
+.company-info {
+  flex: 1;
+}
+
+.company-name {
+  font-weight: 600;
+}
+
+.company-meta {
+  font-size: 0.85rem;
+  opacity: 0.75;
+}
+
+.company-link {
+  font-size: 0.85rem;
+  text-decoration: underline;
+}
+
+.caption.subtle {
+  margin-top: var(--space-3);
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+
+.dashboard-company-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--space-4);
+  margin-top: var(--space-4);
+}
+
+.company-card {
+  padding: var(--space-3);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--card-border);
+  box-shadow: var(--shadow-xs);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.company-card h2 {
+  font-size: 1rem;
+}
+
+.company-card .company-meta {
+  font-size: 0.85rem;
+  opacity: 0.75;
+}
+
+.company-actions {
+  margin-top: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
