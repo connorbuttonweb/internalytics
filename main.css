@@ -977,8 +977,8 @@ body {
 }
 
 .hero-image img {
-  width: 35vw;        /* scales with viewport width */
-  max-width: 640px;   /* cap so it doesn’t get huge */
+  width: 35%;        /* scales with viewport width */
+  max-width: 1080px;   /* cap so it doesn’t get huge */
 }
 
 /* ==========================================
