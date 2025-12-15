@@ -969,12 +969,11 @@ body {
 .hero-image {
   /* CHANGED: no longer absolute */
   position: relative;
+  bottom: 0%;
   z-index: 3;
   display: flex;
   justify-content: flex-end;   /* keep it on the right */
   align-items: flex-end;       /* stick to bottom of section */
-  padding-right: 10%;         /* similar to your old right: 10 */
-  padding-bottom: 0px;      /* adjust as needed */
 }
 
 .hero-image img {
