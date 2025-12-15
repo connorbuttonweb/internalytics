@@ -3,86 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connor Button | Portfolio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <title>Professional Portfolio</title>
     <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-
-    <header>
-        <div class="top-bar">
-            <div class="top-bar-left">
-                <div class="placeholder-icon-sm">
-                    <img src="images/favicon.png" alt="Logo Placeholder" />
-                </div>
-                <span>Welcome to my Website!</span>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span class="logo-icon">⬤</span>
+                <span class="logo-text">PORTFOLIO</span>
             </div>
-            <div class="top-bar-right">
-                <div class="social-placeholders">
-                    <div class="placeholder-icon-sm"></div>
-                    <div class="placeholder-icon-sm"></div>
-                    <div class="placeholder-icon-sm"></div>
-                </div>
-                <a href="#contact" class="btn-small-green">Contact Me</a>
+            
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link active">HOME</a></li>
+                <li><a href="#about" class="nav-link">ABOUT</a></li>
+                <li><a href="#service" class="nav-link">SERVICE</a></li>
+                <li><a href="#portfolio" class="nav-link">PORTFOLIO</a></li>
+                <li><a href="#pages" class="nav-link">PAGES</a></li>
+            </ul>
+
+            <div class="nav-right">
+                <button class="contact-btn">Contact Me</button>
             </div>
         </div>
+    </nav>
 
-        <nav class="main-nav">
-            <ul class="nav-links">
-                <li><a href="#hero" class="active">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#services">Service</a></li>
-                <li><a href="#portfolio">Portfolio</a></li>
-                <li><a href="#pages">Pages</a></li>
-            </ul>
-            
-            </nav>
-    </header>
-
-    <section id="hero">
+    <!-- Hero Section -->
+    <section class="hero" id="home" style="background-image: url('background.jpg');">
         <div class="hero-overlay"></div>
-        <div class="container hero-content">
+        
+        <div class="hero-content">
             <div class="hero-text">
-                <h2><span class="green-text">IMAGINATION</span> IS MORE IMPORTANT THAN KNOWLEDGE</h2>
-                <p class="sub-text">
+                <h1 class="hero-title">
+                    <span class="highlight">IMAGINATION</span> IS MORE<br>
+                    IMPORTANT THAN<br>
+                    KNOWLEDGE
+                </h1>
+                
+                <p class="hero-subtitle">
                     Together we the people achieve more than any single person could ever do alone.
                 </p>
-                <a href="#about" class="btn-main">GETTING STARTED</a>
+                
+                <button class="btn-primary">
+                    GETTING STARTED
+                    <i class="fas fa-arrow-right"></i>
+                </button>
             </div>
-            <div class="hero-image-container">
-                <div class="placeholder-img hero-person-placeholder">
-                    <span>IMAGE PLACEHOLDER</span>
-                </div>
+            
+            <div class="hero-image">
+                <img src="avatar.png" alt="Professional Avatar">
             </div>
+        </div>
+
+        <!-- Social Icons -->
+        <div class="social-icons">
+            <a href="#" class="social-link" title="Facebook">
+                <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="#" class="social-link" title="Twitter">
+                <i class="fab fa-twitter"></i>
+            </a>
+            <a href="#" class="social-link" title="LinkedIn">
+                <i class="fab fa-linkedin-in"></i>
+            </a>
+            <a href="#" class="social-link" title="Instagram">
+                <i class="fab fa-instagram"></i>
+            </a>
         </div>
     </section>
 
-    <section id="about">
-        <div class="container about-content">
-            <div class="section-header">
-                <h3 class="green-text">ABOUT ME</h3>
-                <h2>Who Is Connor Button?</h2>
-            </div>
-            <div class="about-grid">
-                 <div class="about-text">
-                    <p>This is the about section content where the background turns to the requested off-white color (#f6f6ed). You can add details about your background, skills, and experience here.</p>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                    <a href="#portfolio" class="btn-secondary">View My Work</a>
-                </div>
-                <div class="about-image">
-                    <div class="placeholder-img about-img-placeholder">
-                        <span>ABOUT IMAGE PLACEHOLDER</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <footer>
-        <div class="container">
-            <p>&copy; 2023 Connor Button. All rights reserved.</p>
-        </div>
-    </footer>
-
+    <!-- Navigation Arrows -->
+    <div class="nav-arrows">
+        <button class="arrow-btn prev-btn">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <button class="arrow-btn next-btn">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
 </body>
 </html>
