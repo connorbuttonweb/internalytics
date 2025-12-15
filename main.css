@@ -966,7 +966,7 @@ body {
 
 .hero-image {
   position: absolute;
-  bottom: -60px;         /* pushes it to sit over the bottom edge */
+  bottom: 0px;         /* pushes it to sit over the bottom edge */
   right: 10%;
   z-index: 3;
   animation: fadeInRight 0.8s var(--ease-standard);
