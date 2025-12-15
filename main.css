@@ -1010,8 +1010,9 @@ body {
 
 .about-photo img {
   width: 100%;
-  max-width: 360px;
-  border-radius: var(--radius-lg);
+  /* max-width: 360px; */
+  height: auto;
+  border-radius: 0;
   box-shadow: var(--shadow-md);
   display: block;
 }
