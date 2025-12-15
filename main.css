@@ -872,14 +872,12 @@ body {
    ========================================== */
 
 .hero {
-  margin-top: 0px;
-  min-height: 100vh;       /* hero defines the visible area */
-  background-size: cover;    /* image fully covers hero */
-  background-position: center; 
+  margin-top: 60px;
+  min-height: 100vh;
+  background-size: cover;
+  background-position: center;
   background-repeat: no-repeat;
-  position: relative;
-  display: flex;
-  align-items: center;
+  position: relative;        /* anchor for absolute children */
   overflow: hidden;
 }
 
@@ -894,16 +892,18 @@ body {
 }
 
 .hero-content {
-    position: relative;
-    z-index: 2;
-    max-width: var(--container-xl);
-    width: 100%;
-    margin: 0 auto;
-    padding: var(--space-32);
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: calc(var(--space-32) * 1.5);
-    align-items: center;
+  position: absolute;      /* was relative */
+  z-index: 2;
+  max-width: var(--container-xl);
+  width: 100%;
+  left: 50%;               /* center horizontally */
+  top: 50%;                /* center vertically, or adjust as needed */
+  transform: translate(-50%, -50%);
+  padding: var(--space-32);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: calc(var(--space-32) * 1.5);
+  align-items: center;
 }
 
 .hero-text {
@@ -965,20 +965,19 @@ body {
 
 
 .hero-image {
-  position: absolute;
-  bottom: -60px;         /* pushes it to sit over the bottom edge */
-  right: 10%;
+  position: absolute;        /* take it out of the grid flow */
+  right: 10%;                /* adjust horizontally as desired */
+  bottom: 0px;              /* distance from bottom of hero */
   z-index: 3;
-  animation: fadeInRight 0.8s var(--ease-standard);
   display: flex;
+  align-items: flex-end;
   justify-content: center;
-  align-items: center;
 }
 
 .hero-image img {
-    width: 150%;
-    max-width: 480px;
-    border-radius: var(--radius-lg);
+  width: 320px;              /* or a size that looks good */
+  max-width: 100%;
+  border-radius: var(--radius-lg);
 }
 
 /* ==========================================
