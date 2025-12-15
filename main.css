@@ -1,10 +1,10 @@
 /* --- Reset & Global Variables --- */
 :root {
-    --primary-green: #39b54a; /* The bright green from the reference */
+    --primary-green: #39b54a;
     --dark-bg: #111111;
     --light-text: #ffffff;
     --secondary-text: #a8a8a8;
-    --about-bg: #f6f6ed; /* Requested light background color */
+    --about-bg: #f6f6ed; 
     --section-padding: 100px 0;
 }
 
@@ -81,10 +81,8 @@ ul {
     color: white;
 }
 
-
-/* --- PLACEHOLDER STYLES (Remove these when real images are added) --- */
+/* --- PLACEHOLDERS --- */
 .placeholder-icon-sm { width: 20px; height: 20px; background-color: #555; border-radius: 50%; display: inline-block; margin-right: 10px;}
-.placeholder-icon-md { width: 30px; height: 30px; background-color: var(--primary-green); border-radius: 4px; display: inline-block;}
 .placeholder-img {
     background-color: #333;
     display: flex;
@@ -97,10 +95,10 @@ ul {
 
 /* --- Header & Navigation --- */
 header {
-    position: absolute; /* Sits on top of hero image */
+    position: absolute;
     width: 100%;
     z-index: 100;
-    background: rgba(0,0,0,0.2); /* Slight tint for readability */
+    background: rgba(0,0,0,0.2);
     border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
@@ -126,27 +124,15 @@ header {
 
 .main-nav {
     display: flex;
-    justify-content: space-between;
+    /* CHANGED: Centers the navigation links */
+    justify-content: center; 
     align-items: center;
     padding: 20px 5%;
 }
 
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.logo h1 {
-    font-size: 24px;
-    font-weight: 900;
-    letter-spacing: 2px;
-    color: var(--light-text);
-}
-
 .nav-links {
     display: flex;
-    gap: 30px;
+    gap: 40px; /* Increased gap slightly for better centered look */
 }
 
 .nav-links a {
@@ -161,36 +147,34 @@ header {
     color: var(--primary-green);
 }
 
-
 /* --- Hero Section --- */
 #hero {
     position: relative;
-    height: 100vh; /* Full viewport height */
+    height: 100vh;
     min-height: 700px;
     display: flex;
     align-items: center;
-    /* Setting the mountain image as background */
-    background-image: url('mountain-bg.png'); 
+    /* CHANGED: Uses the uploaded background file */
+    background-image: url('background.jpg'); 
     background-size: cover;
-    background-position: center bottom;
-    background-attachment: fixed; /* Creates a parallax scrolling effect */
+    background-position: center center;
+    background-attachment: fixed;
 }
 
-/* The dark fade overlay */
 .hero-overlay {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    /* Adjust opacity (0.85) to make image more or less faded */
-    background: linear-gradient(to right, rgba(0,0,0,0.9) 30%, rgba(0,0,0,0.7)); 
+    /* Dark overlay to ensure text is readable on the snow */
+    background: linear-gradient(to right, rgba(0,0,0,0.8) 30%, rgba(0,0,0,0.5)); 
     z-index: 1;
 }
 
 .hero-content {
     position: relative;
-    z-index: 2; /* Ensure text is above the overlay */
+    z-index: 2;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -209,15 +193,17 @@ header {
     line-height: 1.1;
     margin-bottom: 20px;
     text-transform: uppercase;
+    text-shadow: 2px 2px 10px rgba(0,0,0,0.5); /* Added shadow for readability */
 }
 
 .sub-text {
     font-size: 16px;
-    color: var(--secondary-text);
+    color: #ddd; /* Lightened text color for better contrast */
     line-height: 1.6;
     max-width: 450px;
     border-left: 3px solid var(--primary-green);
     padding-left: 20px;
+    background: rgba(0,0,0,0.3); /* Slight background for readability */
 }
 
 .hero-image-container {
@@ -228,19 +214,17 @@ header {
     align-items: flex-end;
 }
 
-/* Styling the placeholder for the main hero image */
 .hero-person-placeholder {
     width: 400px;
     height: 550px;
     background-color: rgba(255,255,255,0.1);
-    border: none; /* Remove dashed border for this specific one */
+    border: none;
 }
-
 
 /* --- About Section --- */
 #about {
     background-color: var(--about-bg);
-    color: var(--dark-bg); /* Switch text color for light background */
+    color: var(--dark-bg);
     padding: var(--section-padding);
 }
 
