@@ -872,7 +872,7 @@ body {
    ========================================== */
 
 .hero {
-  margin-top: 60px;
+  margin-top: 0px;
   min-height: 100vh;       /* hero defines the visible area */
   background-size: cover;    /* image fully covers hero */
   background-position: center; 
