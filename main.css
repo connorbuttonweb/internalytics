@@ -872,7 +872,7 @@ body {
    ========================================== */
 
 .hero {
-  margin-top: 60px;
+  margin-top: 0px;
   min-height: 100vh;
   background-size: cover;
   background-position: center;
@@ -969,7 +969,7 @@ body {
 .hero-image {
   /* CHANGED: no longer absolute */
   position: relative;
-  bottom: 0%;
+  padding-right: 50px;
   z-index: 3;
   display: flex;
   justify-content: flex-end;   /* keep it on the right */
