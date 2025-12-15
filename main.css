@@ -909,6 +909,7 @@ body {
 }
 
 .hero-text {
+    left: 25px;
     color: var(--color-cream-100);
     animation: fadeInLeft 0.8s var(--ease-standard);
 }
