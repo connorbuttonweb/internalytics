@@ -967,9 +967,9 @@ body {
 
 
 .hero-image {
-  /* CHANGED: no longer absolute */
-  position: relative;
-  padding-right: 50px;
+  position: absolute;
+  bottom: -120px;         /* pushes it to sit over the bottom edge */
+  right: 50px;
   z-index: 3;
   display: flex;
   justify-content: flex-end;   /* keep it on the right */
