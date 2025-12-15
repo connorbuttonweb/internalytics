@@ -872,15 +872,16 @@ body {
    ========================================== */
 
 .hero {
-    margin-top: 60px;
-    min-height: 100vh;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    position: relative;
-    display: flex;
-    align-items: center;
-    overflow: visible;
+  margin-top: 60px;
+  height: 100vh;              /* fixed frame */
+  max-height: 800px;          /* optional cap */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;         /* anchor for avatar */
+  display: flex;
+  align-items: center;
+  overflow: hidden;           /* keep everything inside the image frame */
 }
 
 .hero-overlay {
@@ -966,20 +967,20 @@ body {
 
 .hero-image {
   position: absolute;
-  bottom: 0px;         /* pushes it to sit over the bottom edge */
-  right: 10%;
+  left: 50%;
+  bottom: 0;                  /* sit exactly on bottom edge */
+  transform: translateX(-50%);/* center horizontally */
   z-index: 3;
-  animation: fadeInRight 0.8s var(--ease-standard);
   display: flex;
+  align-items: flex-end;
   justify-content: center;
-  align-items: center;
+  height: 60%;                /* how tall the avatar block is within hero */
 }
 
 .hero-image img {
-    width: 130%;
-    max-width: 480px;
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-lg);
+  height: 150%;               /* fill the hero-image height */
+  width: auto;                /* keep aspect ratio */
+  border-radius: var(--radius-lg);
 }
 
 /* ==========================================
