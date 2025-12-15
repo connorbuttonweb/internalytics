@@ -830,6 +830,22 @@ body {
     cursor: pointer;
 }
 
+/* New white nav link (matches social buttons) */
+.nav-link--white {
+  border: 2px solid var(--color-primary);
+  border-radius: var(--radius-full);
+  padding: 6px 14px;
+  color: var(--color-primary);
+  background-color: transparent;
+  transition: all var(--duration-normal) var(--ease-standard);
+}
+
+.nav-link--white:hover {
+  background-color: var(--color-primary);
+  color: var(--color-cream-100);
+  border-color: var(--color-primary-hover);
+}
+
 .nav-link:hover,
 .nav-link.active {
     color: var(--color-primary);
@@ -991,7 +1007,7 @@ body {
    ========================================== */
 .about-me {
   background-color: #f6f6ed;
-  padding: 40px 0;
+  min-height: 100vh;
 }
 
 .about-container {
