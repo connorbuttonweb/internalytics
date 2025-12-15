@@ -1,0 +1,299 @@
+/* --- Reset & Global Variables --- */
+:root {
+    --primary-green: #39b54a; /* The bright green from the reference */
+    --dark-bg: #111111;
+    --light-text: #ffffff;
+    --secondary-text: #a8a8a8;
+    --about-bg: #f6f6ed; /* Requested light background color */
+    --section-padding: 100px 0;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    color: var(--light-text);
+    overflow-x: hidden;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+a {
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+ul {
+    list-style: none;
+}
+
+/* --- Typography Helpers --- */
+.green-text {
+    color: var(--primary-green);
+}
+
+/* --- Buttons --- */
+.btn-main {
+    display: inline-block;
+    background-color: var(--primary-green);
+    color: var(--light-text);
+    padding: 15px 35px;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 1px;
+    border-radius: 4px;
+    margin-top: 30px;
+}
+
+.btn-small-green {
+    background-color: var(--primary-green);
+    color: var(--light-text);
+    padding: 8px 20px;
+    font-size: 12px;
+    font-weight: 700;
+    border-radius: 4px;
+}
+
+.btn-secondary {
+    display: inline-block;
+    border: 2px solid var(--primary-green);
+    color: var(--dark-bg);
+    padding: 12px 30px;
+    font-weight: 700;
+    font-size: 14px;
+    margin-top: 20px;
+    transition: all 0.3s ease;
+}
+.btn-secondary:hover {
+    background-color: var(--primary-green);
+    color: white;
+}
+
+
+/* --- PLACEHOLDER STYLES (Remove these when real images are added) --- */
+.placeholder-icon-sm { width: 20px; height: 20px; background-color: #555; border-radius: 50%; display: inline-block; margin-right: 10px;}
+.placeholder-icon-md { width: 30px; height: 30px; background-color: var(--primary-green); border-radius: 4px; display: inline-block;}
+.placeholder-img {
+    background-color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #777;
+    font-weight: bold;
+    border: 2px dashed #555;
+}
+
+/* --- Header & Navigation --- */
+header {
+    position: absolute; /* Sits on top of hero image */
+    width: 100%;
+    z-index: 100;
+    background: rgba(0,0,0,0.2); /* Slight tint for readability */
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 5%;
+    background-color: rgba(0,0,0,0.5);
+    font-size: 12px;
+    color: var(--secondary-text);
+}
+
+.top-bar-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.social-placeholders {
+    display: flex;
+}
+
+.main-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 5%;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo h1 {
+    font-size: 24px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    color: var(--light-text);
+}
+
+.nav-links {
+    display: flex;
+    gap: 30px;
+}
+
+.nav-links a {
+    color: var(--secondary-text);
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.nav-links a:hover, .nav-links a.active {
+    color: var(--primary-green);
+}
+
+
+/* --- Hero Section --- */
+#hero {
+    position: relative;
+    height: 100vh; /* Full viewport height */
+    min-height: 700px;
+    display: flex;
+    align-items: center;
+    /* Setting the mountain image as background */
+    background-image: url('mountain-bg.png'); 
+    background-size: cover;
+    background-position: center bottom;
+    background-attachment: fixed; /* Creates a parallax scrolling effect */
+}
+
+/* The dark fade overlay */
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Adjust opacity (0.85) to make image more or less faded */
+    background: linear-gradient(to right, rgba(0,0,0,0.9) 30%, rgba(0,0,0,0.7)); 
+    z-index: 1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2; /* Ensure text is above the overlay */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+    padding-top: 80px;
+}
+
+.hero-text {
+    flex: 1;
+    max-width: 600px;
+}
+
+.hero-text h2 {
+    font-size: 50px;
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+}
+
+.sub-text {
+    font-size: 16px;
+    color: var(--secondary-text);
+    line-height: 1.6;
+    max-width: 450px;
+    border-left: 3px solid var(--primary-green);
+    padding-left: 20px;
+}
+
+.hero-image-container {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    height: 100%;
+    align-items: flex-end;
+}
+
+/* Styling the placeholder for the main hero image */
+.hero-person-placeholder {
+    width: 400px;
+    height: 550px;
+    background-color: rgba(255,255,255,0.1);
+    border: none; /* Remove dashed border for this specific one */
+}
+
+
+/* --- About Section --- */
+#about {
+    background-color: var(--about-bg);
+    color: var(--dark-bg); /* Switch text color for light background */
+    padding: var(--section-padding);
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.section-header h3 {
+    font-size: 16px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.section-header h2 {
+    font-size: 36px;
+    font-weight: 700;
+}
+
+.about-grid {
+    display: flex;
+    align-items: center;
+    gap: 50px;
+}
+
+.about-text {
+    flex: 1;
+}
+
+.about-text p {
+    margin-bottom: 20px;
+    line-height: 1.7;
+    color: #555;
+}
+
+.about-image {
+    flex: 1;
+}
+
+.about-img-placeholder {
+    width: 100%;
+    height: 400px;
+    background-color: #e0e0da;
+    border-color: #ccc;
+    color: #999;
+}
+
+/* --- Footer --- */
+footer {
+    background-color: var(--dark-bg);
+    color: var(--secondary-text);
+    padding: 30px 0;
+    text-align: center;
+    font-size: 14px;
+}
