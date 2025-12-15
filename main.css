@@ -968,17 +968,20 @@ body {
 
 .hero-image {
   position: absolute;
-  bottom: 0px;         /* pushes it to sit over the bottom edge */
+  bottom: 0;
   right: 50px;
   z-index: 3;
   display: flex;
-  justify-content: flex-end;   /* keep it on the right */
-  align-items: flex-end;       /* stick to bottom of section */
+  align-items: flex-end;
+  justify-content: flex-end;
+  width: auto;        /* important: do NOT set a max-width here */
+  max-width: none;
 }
 
 .hero-image img {
-  width: 35%;        /* scales with viewport width */
-  max-width: 1080px;   /* cap so it doesn’t get huge */
+  width: 40vw;        /* try 40vw here */
+  height: auto;
+  border-radius: var(--radius-lg);
 }
 
 /* ==========================================
