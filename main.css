@@ -966,7 +966,7 @@ body {
 
 .hero-image {
   position: absolute;
-  bottom: -40px;         /* pushes it to sit over the bottom edge */
+  bottom: 0px;         /* pushes it to sit over the bottom edge */
   right: 10%;
   z-index: 3;
   animation: fadeInRight 0.8s var(--ease-standard);
@@ -979,7 +979,6 @@ body {
     width: 130%;
     max-width: 480px;
     border-radius: var(--radius-lg);
-    filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.3));
     box-shadow: var(--shadow-lg);
 }
 
