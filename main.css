@@ -1000,13 +1000,45 @@ body {
   padding: 0 var(--space-32);
 }
 
-.about-me h2 {
+/* two columns: photo left, text right */
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: var(--space-32);
+  align-items: center;
+}
+
+.about-photo img {
+  width: 100%;
+  max-width: 360px;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  display: block;
+}
+
+/* text on the right */
+.about-text h2 {
   margin-bottom: var(--space-24);
 }
 
-.about-me p {
+.about-text p {
   max-width: 700px;
   line-height: 1.8;
+}
+
+/* stack on small screens */
+@media (max-width: 768px) {
+  .about-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .about-photo {
+    text-align: center;
+  }
+
+  .about-photo img {
+    margin: 0 auto var(--space-24);
+  }
 }
 
 /* ==========================================
