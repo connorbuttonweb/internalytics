@@ -909,9 +909,9 @@ body {
 }
 
 .hero-text {
-    left: 25px;
     color: var(--color-cream-100);
-    animation: fadeInLeft 0.8s var(--ease-standard);
+    animation: fadeInLeft 1s var(--ease-standard);
+    margin-left: 40px;
 }
 
 .hero-title {
@@ -977,6 +977,7 @@ body {
   justify-content: flex-end;
   width: auto;        /* important: do NOT set a max-width here */
   max-width: none;
+  animation: fadeInRight 1s var(--ease-standard);
 }
 
 .hero-image img {
