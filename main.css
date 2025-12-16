@@ -1464,15 +1464,11 @@ body {
   margin-top: 0px;
   background-color: #f6f6ed;
   min-height: 100vh;
-  padding-top: var(--space-64);
-  padding-left: 0%;
-  padding-right: 0%;
 }
 
 .about-container {
   max-width: 100%;
   margin: 0 auto;
-  /* padding: var(--space-64) var(--space-20); */
 }
 
 /* two columns: photo left, text right */
@@ -1485,9 +1481,8 @@ body {
 }
 
 .about-photo {
-  display: block;
+  margin: 0;
   height: 100%;
-  justify-content: center;
 }
 
 .about-photo img {
