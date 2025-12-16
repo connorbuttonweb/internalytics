@@ -1463,7 +1463,7 @@ body {
 .about-me {
   margin-top: 0;
   background-color: #f6f6ed;
-  min-height: 100vh;              /* fill viewport */
+  min-height: 85vh;              /* fill viewport */
   display: flex;                  /* center child */
   align-items: center;            /* vertical center */
 }
@@ -1477,6 +1477,8 @@ body {
 /* two columns: photo left, text right */
 .about-grid {
   display: grid;
+  padding-left: var(--space-32);
+  padding-right: var(--space-32);
   grid-template-columns: 1fr 1fr;
   gap: var(--space-32);
   align-items: center;            /* vertically center both columns */
