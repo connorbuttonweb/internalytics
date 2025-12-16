@@ -1464,12 +1464,14 @@ body {
   background-color: #f6f6ed;
   min-height: 100vh;
   padding-top: var(--space-64);
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .about-container {
   max-width: var(--container-lg);
   margin: 0 auto;
-  padding: var(--space-64) var(--space-20);
+  /* padding: var(--space-64) var(--space-20); */
 }
 
 /* two columns: photo left, text right */
