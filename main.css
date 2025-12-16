@@ -115,6 +115,23 @@
   --space-24: 24px;
   --space-32: 32px;
 
+  /* Mobile spacing adjustments */
+--space-36: 36px;
+--space-40: 40px;
+--space-48: 48px;
+--space-64: 64px;
+
+/* Mobile-first breakpoints */
+--breakpoint-sm: 640px;
+--breakpoint-md: 768px;
+--breakpoint-lg: 1024px;
+--breakpoint-xl: 1280px;
+--breakpoint-2xl: 1536px;
+
+/* Touch-friendly sizes */
+--touch-target-min: 44px;  /* Minimum clickable area for mobile */
+--touch-target-md: 48px;
+
   /* Border Radius */
   --radius-sm: 6px;
   --radius-base: 8px;
@@ -142,6 +159,22 @@
   --container-md: 768px;
   --container-lg: 1024px;
   --container-xl: 1280px;
+
+  /* Responsive font sizes */
+  --font-size-xs-mobile: 10px;
+  --font-size-sm-mobile: 13px;
+  --font-size-base-mobile: 13px;
+  --font-size-md-mobile: 14px;
+  --font-size-lg-mobile: 15px;
+  --font-size-xl-mobile: 16px;
+  --font-size-2xl-mobile: 18px;
+  --font-size-3xl-mobile: 22px;
+  --font-size-4xl-mobile: 28px;
+
+  /* Mobile-specific padding */
+  --mobile-padding: 16px;
+  --mobile-padding-lg: 20px;
+  --mobile-padding-xl: 24px;
 }
 
 /* Dark mode colors */
@@ -203,6 +236,85 @@
     --color-warning-rgb: var(--color-orange-400-rgb);
     --color-info-rgb: var(--color-gray-300-rgb);
   }
+}
+
+/* ==========================================
+MOBILE UTILITY CLASSES
+========================================== */
+
+/* Text utilities for responsive sizing */
+.text-sm-mobile {
+  font-size: var(--font-size-sm-mobile);
+}
+
+.text-base-mobile {
+  font-size: var(--font-size-base-mobile);
+}
+
+.text-lg-mobile {
+  font-size: var(--font-size-lg-mobile);
+}
+
+/* Responsive display utilities */
+.show-mobile {
+  display: none;
+}
+
+.show-tablet {
+  display: none;
+}
+
+.hide-mobile {
+  display: block;
+}
+
+.hide-tablet {
+  display: block;
+}
+
+/* Responsive spacing utilities */
+.px-mobile {
+  padding-left: var(--mobile-padding);
+  padding-right: var(--mobile-padding);
+}
+
+.py-mobile {
+  padding-top: var(--mobile-padding);
+  padding-bottom: var(--mobile-padding);
+}
+
+.px-mobile-lg {
+  padding-left: var(--mobile-padding-lg);
+  padding-right: var(--mobile-padding-lg);
+}
+
+.py-mobile-lg {
+  padding-top: var(--mobile-padding-lg);
+  padding-bottom: var(--mobile-padding-lg);
+}
+
+/* Touch-friendly button sizing */
+.btn-touch {
+  min-height: var(--touch-target-min);
+  min-width: var(--touch-target-min);
+  padding: 12px 16px;
+}
+
+.btn-touch-lg {
+  min-height: var(--touch-target-md);
+  min-width: var(--touch-target-md);
+  padding: 14px 20px;
+}
+
+/* Responsive container widths */
+.container-mobile {
+  width: 100%;
+  padding: 0 var(--mobile-padding);
+}
+
+.container-mobile-lg {
+  width: 100%;
+  padding: 0 var(--mobile-padding-lg);
 }
 
 /* Data attribute for manual theme switching */
@@ -867,6 +979,58 @@ body {
     box-shadow: var(--focus-ring);
 }
 
+@media (max-width: 768px) {
+  .navbar {
+    padding: var(--space-12) 0;
+    position: sticky;  /* Changed from fixed for mobile */
+    top: 0;
+  }
+
+  .nav-container {
+    padding: 0 var(--mobile-padding);
+    gap: var(--space-16);
+  }
+
+  .nav-logo {
+    font-size: var(--font-size-lg-mobile);
+  }
+
+  .logo-icon {
+    font-size: var(--font-size-xl);
+  }
+}
+
+@media (max-width: 640px) {
+  .navbar {
+    padding: var(--space-10) 0;
+  }
+
+  .nav-container {
+    padding: 0 var(--mobile-padding);
+    gap: var(--space-12);
+  }
+
+  .nav-logo {
+    font-size: var(--font-size-md);
+  }
+
+  .nav-menu {
+    gap: var(--space-12);
+    font-size: var(--font-size-sm-mobile);
+  }
+
+  .nav-link {
+    font-size: var(--font-size-sm-mobile);
+    padding: var(--space-8) var(--space-12);
+  }
+
+  .contact-btn {
+    padding: var(--space-8) var(--space-16);
+    font-size: var(--font-size-sm-mobile);
+    min-height: var(--touch-target-min);
+  }
+}
+
 /* ==========================================
    HERO SECTION
    ========================================== */
@@ -984,6 +1148,286 @@ body {
   width: 40vw;        /* try 40vw here */
   height: auto;
   border-radius: var(--radius-lg);
+}
+
+@media (max-width: 1024px) {
+  .hero {
+    min-height: 80vh;
+    margin-top: 60px;
+  }
+
+  .hero-content {
+    grid-template-columns: 1fr;
+    padding: var(--space-24);
+    gap: var(--space-24);
+    justify-items: center;
+  }
+
+  .hero-text {
+    margin-left: 0;
+    text-align: center;
+  }
+
+  .hero-title {
+    font-size: 32px;
+    margin-bottom: var(--space-20);
+  }
+
+  .hero-subtitle {
+    font-size: 16px;
+    margin: 0 auto var(--space-24);
+  }
+
+  .hero-image {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  .hero-image img {
+    width: 100%;
+    max-width: 400px;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero {
+    min-height: 70vh;
+    margin-top: 56px;
+    padding-top: var(--space-32);
+  }
+
+  .hero-overlay {
+    background: rgba(var(--color-slate-900-rgb), 0.5);
+  }
+
+  .hero-content {
+    padding: var(--mobile-padding-lg);
+    gap: var(--space-20);
+    grid-template-columns: 1fr;
+  }
+
+  .hero-text {
+    margin-left: 0;
+  }
+
+  .hero-title {
+    font-size: var(--font-size-3xl-mobile);
+    line-height: 1.3;
+    margin-bottom: var(--space-16);
+  }
+
+  .hero-subtitle {
+    font-size: var(--font-size-md);
+    line-height: 1.6;
+    margin-bottom: var(--space-20);
+    max-width: 100%;
+  }
+
+  .btn-primary {
+    width: 100%;
+    max-width: 300px;
+    padding: var(--space-12) var(--space-24);
+    font-size: var(--font-size-md);
+    min-height: var(--touch-target-min);
+    justify-content: center;
+  }
+
+  .hero-image {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .hero-image img {
+    width: 100%;
+    max-width: 350px;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero {
+    min-height: 60vh;
+    margin-top: 48px;
+  }
+
+  .hero-content {
+    padding: var(--mobile-padding);
+    gap: var(--space-16);
+  }
+
+  .hero-title {
+    font-size: var(--font-size-2xl-mobile);
+    font-size: clamp(20px, 6vw, 28px);
+    margin-bottom: var(--space-12);
+    letter-spacing: -0.02em;
+  }
+
+  .hero-subtitle {
+    font-size: var(--font-size-sm-mobile);
+    margin-bottom: var(--space-16);
+  }
+
+  .hero-text {
+    margin-left: 0;
+  }
+
+  .btn-primary {
+    width: 100%;
+    padding: var(--space-10) var(--space-20);
+    font-size: var(--font-size-sm-mobile);
+    gap: var(--space-8);
+  }
+
+  .hero-image img {
+    max-width: 280px;
+    width: 100%;
+  }
+
+  .social-icons {
+    flex-direction: row;
+    gap: var(--space-12);
+    position: static;
+    justify-content: center;
+    margin-top: var(--space-24);
+    transform: none;
+  }
+
+  .social-link {
+    width: 36px;
+    height: 36px;
+    font-size: var(--font-size-sm);
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    min-height: 50vh;
+    margin-top: 44px;
+  }
+
+  .hero-content {
+    padding: var(--mobile-padding);
+    gap: var(--space-12);
+  }
+
+  .hero-title {
+    font-size: clamp(18px, 5.5vw, 24px);
+    margin-bottom: var(--space-10);
+  }
+
+  .hero-subtitle {
+    font-size: 12px;
+    margin-bottom: var(--space-12);
+  }
+
+  .btn-primary {
+    padding: var(--space-10) var(--space-18);
+    font-size: 12px;
+  }
+
+  .hero-image img {
+    max-width: 250px;
+  }
+
+  .hero-overlay {
+    background: rgba(var(--color-slate-900-rgb), 0.6);
+  }
+}
+
+/* ==========================================
+   GALLERY SECTION
+   ========================================== */
+
+/* Make each project act as a strip band */
+.job-block {
+  margin: 3rem auto;
+  padding: 2rem 0;
+  border-top: 1px solid rgba(0,0,0,0.06);
+}
+
+/* Strip-style gallery similar to Pines */
+.gallery.gallery--strip {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 20px;              /* matches Pines gutter ~20px */
+  scroll-snap-type: x mandatory;
+  padding: 0.75rem 0;
+}
+
+/* Each tile behaves like a strip item */
+.gallery.gallery--strip figure {
+  flex: 0 0 auto;
+  width: clamp(260px, 30vw, 420px);
+  height: 260px;          /* fixed height like rowHeight 324px in Pines config */
+  margin: 0;
+  position: relative;
+  cursor: zoom-in;
+  border-radius: var(--radius);
+  overflow: hidden;
+  scroll-snap-align: start;
+}
+
+/* Ensure edge-to-edge cropping */
+.gallery.gallery--strip img,
+.gallery.gallery--strip video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Optional: hide captions under tiles to match Pines’ no-caption strips */
+.gallery.gallery--strip figcaption {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .job-block {
+    margin: 2rem auto;
+    padding: 1.5rem 0;
+  }
+
+  .gallery.gallery--strip {
+    gap: 12px;
+    padding: 0.5rem 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;  /* Smooth scrolling on iOS */
+  }
+
+  .gallery.gallery--strip figure {
+    width: clamp(180px, 45vw, 350px);
+    height: 180px;
+    flex-basis: clamp(180px, 45vw, 350px);
+  }
+}
+
+@media (max-width: 640px) {
+  .gallery.gallery--strip {
+    gap: 10px;
+    scroll-padding: var(--mobile-padding);
+  }
+
+  .gallery.gallery--strip figure {
+    width: calc(100vw - 36px);
+    height: 150px;
+    flex-basis: calc(100vw - 36px);
+    max-width: 100%;
+  }
+
+  .job-block {
+    margin: 1.5rem auto;
+    padding: 1rem 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .gallery.gallery--strip figure {
+    height: 120px;
+  }
 }
 
 /* ==========================================
@@ -1272,4 +1716,247 @@ body {
         gap: var(--space-12);
         margin-top: var(--space-24);
     }
+}
+
+/* ==========================================
+COMPREHENSIVE MOBILE BREAKPOINTS
+========================================== */
+
+/* SMALL PHONES (320px - 480px) */
+@media (max-width: 480px) {
+  :root {
+    /* Reduce all spacing slightly */
+    font-size: 14px;
+  }
+
+  html, body {
+    overflow-x: hidden;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* Stack everything vertically */
+  .flex {
+    flex-direction: column;
+  }
+
+  .grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Ensure touch targets are clickable */
+  button, a, [role="button"] {
+    min-height: var(--touch-target-min);
+    min-width: var(--touch-target-min);
+    padding: 10px 14px;
+  }
+
+  /* Hide desktop elements */
+  .desktop-only {
+    display: none !important;
+  }
+
+  .mobile-only {
+    display: block !important;
+  }
+
+  /* Full width forms */
+  input, textarea, select {
+    width: 100%;
+    padding: var(--space-12) var(--space-16);
+    font-size: 16px;  /* Prevents zoom on iOS */
+  }
+
+  /* Better image scaling */
+  img, video {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* Improve readability */
+  p, li, dt, dd {
+    font-size: var(--font-size-sm-mobile);
+    line-height: 1.8;
+  }
+
+  /* Navigation improvements */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 999;
+  }
+
+  /* Reduce padding on small containers */
+  .container {
+    padding-left: var(--mobile-padding);
+    padding-right: var(--mobile-padding);
+  }
+
+  section {
+    padding: var(--space-24) var(--mobile-padding);
+  }
+}
+
+/* MEDIUM PHONES & TABLETS (481px - 768px) */
+@media (max-width: 768px) and (min-width: 481px) {
+  :root {
+    font-size: 15px;
+  }
+
+  /* Slightly larger touch targets on tablets */
+  button, a, [role="button"] {
+    min-height: 44px;
+  }
+
+  .mobile-only {
+    display: block !important;
+  }
+
+  .tablet-only {
+    display: block !important;
+  }
+
+  input, textarea, select {
+    font-size: 16px;
+  }
+
+  /* Two-column on larger tablets */
+  .tablet-2-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-24);
+  }
+}
+
+/* LARGE TABLETS & SMALL DESKTOPS (769px - 1024px) */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .tablet-and-up {
+    display: block;
+  }
+
+  .mobile-only {
+    display: none !important;
+  }
+
+  .hide-tablet {
+    display: none !important;
+  }
+}
+
+/* ORIENTATION-SPECIFIC FIXES */
+@media (orientation: portrait) and (max-width: 768px) {
+  .hero-image img {
+    max-width: 90vw;
+  }
+
+  section {
+    padding: var(--space-24) var(--mobile-padding);
+  }
+}
+
+@media (orientation: landscape) and (max-height: 600px) {
+  .hero {
+    min-height: auto;
+    padding: var(--space-16) 0;
+  }
+
+  .hero-content {
+    gap: var(--space-16);
+    padding: var(--space-16);
+  }
+
+  nav {
+    padding: var(--space-8) 0;
+  }
+}
+
+/* ==========================================
+ACCESSIBILITY & TOUCH IMPROVEMENTS
+========================================== */
+
+/* Ensure enough space for touch */
+@media (hover: none) and (pointer: coarse) {
+  /* Mobile/touch devices */
+  button, a, input[type="button"], input[type="submit"] {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 12px 16px;
+  }
+
+  /* Increase hover areas */
+  .nav-link {
+    padding: 8px 12px;
+  }
+
+  /* Remove hover effects on touch devices */
+  .btn-primary:hover {
+    transform: none;
+  }
+
+  .social-link:hover {
+    transform: none;
+  }
+
+  /* Better text selection on mobile */
+  body {
+    -webkit-user-select: text;
+    user-select: text;
+  }
+}
+
+/* Dark mode - Mobile specific */
+@media (max-width: 768px) and (prefers-color-scheme: dark) {
+  .navbar {
+    background: var(--color-surface);
+  }
+
+  .hero-overlay {
+    background: rgba(0, 0, 0, 0.6);
+  }
+}
+
+/* Light mode - Mobile specific */
+@media (max-width: 768px) and (prefers-color-scheme: light) {
+  input, textarea, select {
+    background-color: #ffffff;
+    color: #000000;
+  }
+}
+
+/* ==========================================
+PERFORMANCE: REDUCE ANIMATIONS ON MOBILE
+========================================== */
+
+@media (max-width: 768px) {
+  * {
+    animation-duration: 0.15s !important;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+}
+
+/* ==========================================
+PRINT STYLES (BONUS)
+========================================== */
+
+@media print {
+  nav, .contact-btn, .social-icons {
+    display: none !important;
+  }
+
+  .container {
+    max-width: 100%;
+  }
+
+  body {
+    font-size: 12pt;
+    line-height: 1.5;
+    color: #000;
+    background: #fff;
+  }
 }
