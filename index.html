@@ -21,6 +21,17 @@
     }
     .gallery img, .gallery video{ display:block; width:100%; height:100%; object-fit:cover; }
 
+    /* --- ADDED THIS FOR ABOUT SECTION LIGHTBOX INTERACTIVITY --- */
+    .about-photo-grid img {
+        cursor: pointer;
+        transition: transform 0.2s ease;
+    }
+    .about-photo-grid img:hover {
+        transform: scale(1.02);
+        opacity: 0.9;
+    }
+    /* ----------------------------------------------------------- */
+
     .media-badge{
       position: absolute;
       right: 10px; bottom: 10px;
@@ -99,14 +110,10 @@
     });
   }, { threshold: 0.1 });
   vids.forEach(v => iv.observe(v));
-
-  // 3) Lightbox thumbnails: (already using smaller thumbs)
-  // Make sure full-res loads ONLY when opened (your existing lightbox does this).
 })();
 </script>
 
 <body>
-    <!-- Navigation Bar -->
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-logo">
@@ -128,7 +135,6 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
     <section class="hero" id="home" style="background-image: url('images/background.jpg');">
         <div class="hero-overlay"></div>
         
@@ -155,7 +161,6 @@
             </div>
         </div>
 
-        <!-- Social Icons -->
         <div class="social-icons">
             <a href="https://www.linkedin.com/in/connor-button-a9097833b/" class="social-link" title="LinkedIn" target="_blank" rel="noopener">
                 <i class="fab fa-linkedin-in"></i>
@@ -169,23 +174,17 @@
         </div>
     </section>
 
-        <!-- About Me Section -->
-
     <section class="about-me" id="about">
     <div class="about-container">
         <div class="about-grid">
             <div class="about-photo">
             <div class="about-photo-grid">
-                <!-- About photo 1 -->
                 <img src="images/about1.jpg" alt="Description 1" class="about-photo">
 
-                <!-- About photo 2 -->
                 <img src="images/about2.jpg" alt="Description 2" class="about-photo">
 
-                <!-- About photo 3 -->
                 <img src="images/about3.jpg" alt="Description 3" class="about-photo">
 
-                <!-- About photo 4 -->
                 <img src="images/about4.jpg" alt="Description 4" class="about-photo">
             </div>
             </div>
@@ -210,7 +209,6 @@
     </div>
     </section>
 
-  <!-- Lightbox -->
   <div class="lightbox" id="lightbox" aria-modal="true" role="dialog" aria-label="Media viewer">
     <div class="lightbox-content" id="lbContent" tabindex="0" aria-live="polite"></div>
     <button class="close" id="lbClose" aria-label="Close (Esc)">✕</button>
@@ -219,7 +217,7 @@
     <p class="caption" id="lbCaption"></p>
   </div>
 
-    <script>
+<script>
   document.addEventListener('DOMContentLoaded', function () {
     const lightbox = document.getElementById('lightbox');
     const lbContent = document.getElementById('lbContent');
@@ -228,26 +226,34 @@
     const lbPrev = document.getElementById('lbPrev');
     const lbNext = document.getElementById('lbNext');
 
-    const photos = Array.from(document.querySelectorAll('.about-photo'));
+    // EDITED SELECTOR: Specifically target images inside the grid
+    // The previous selector '.about-photo' was also selecting the container DIV, causing errors.
+    const photos = Array.from(document.querySelectorAll('.about-photo-grid img'));
     let currentIndex = 0;
 
     function openLightbox(index) {
       currentIndex = index;
       const img = photos[currentIndex];
+      
+      // Safety check to ensure we actually clicked an image
+      if (!img || img.tagName !== 'IMG') return;
 
       lbContent.innerHTML = '';
       const clone = img.cloneNode(true);
+      // Remove classes to prevent layout conflicts inside the lightbox
       clone.removeAttribute('class');
+      clone.style.cursor = 'default'; // Reset cursor in lightbox
       lbContent.appendChild(clone);
 
       lbCaption.textContent = img.alt || '';
 
-      lightbox.style.display = 'flex'; // or 'block' according to your CSS
+      lightbox.style.display = 'flex'; 
       lbContent.focus();
     }
 
     function closeLightbox() {
       lightbox.style.display = 'none';
+      lbContent.innerHTML = ''; // Clear content on close
     }
 
     function showNext() {
@@ -262,20 +268,29 @@
       openLightbox(currentIndex);
     }
 
+    // Attach click events
     photos.forEach((img, index) => {
-      img.addEventListener('click', () => openLightbox(index));
+      img.addEventListener('click', (e) => {
+        e.stopPropagation(); // Prevent bubbling issues
+        openLightbox(index);
+      });
     });
 
     lbClose.addEventListener('click', closeLightbox);
-    lbNext.addEventListener('click', showNext);
-    lbPrev.addEventListener('click', showPrev);
+    lbNext.addEventListener('click', (e) => { e.stopPropagation(); showNext(); });
+    lbPrev.addEventListener('click', (e) => { e.stopPropagation(); showPrev(); });
 
+    // Close when clicking outside content
     lightbox.addEventListener('click', (e) => {
       if (e.target === lightbox) closeLightbox();
     });
 
+    // Keyboard navigation
     document.addEventListener('keydown', (e) => {
-      if (lightbox.style.display !== 'flex' && lightbox.style.display !== 'block') return;
+      // Check if lightbox is actually visible
+      const style = window.getComputedStyle(lightbox);
+      if (style.display === 'none') return;
+      
       if (e.key === 'Escape') closeLightbox();
       if (e.key === 'ArrowRight') showNext();
       if (e.key === 'ArrowLeft') showPrev();
