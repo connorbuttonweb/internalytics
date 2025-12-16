@@ -1402,7 +1402,7 @@ body {
 .about-me {
   margin-top: 0;
   background-color: #f6f6ed;
-  min-height: 85vh;              /* fill viewport */
+  min-height: 95vh;              /* fill viewport */
   display: flex;                  /* center child */
   align-items: center;            /* vertical center */
 }
