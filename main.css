@@ -1463,12 +1463,13 @@ body {
 .about-me {
   background-color: #f6f6ed;
   min-height: 100vh;
+  padding-top: var(--space-64);
 }
 
 .about-container {
   max-width: var(--container-lg);
   margin: 0 auto;
-  padding: 0 var(--space-20);   /* was var(--space-32); slightly less horizontal space */
+  padding: var(--space-64) var(--space-20);
 }
 
 /* two columns: photo left, text right */
@@ -1477,12 +1478,19 @@ body {
   grid-template-columns: 1fr 1fr;
   gap: var(--space-32);
   align-items: center;
+  justify-items: stretch;
+}
+
+.about-photo {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
 }
 
 .about-photo img {
   width: 100%;
-  /* max-width: 360px; */
   height: auto;
+  object-fit: cover;
   border-radius: 0;
   box-shadow: var(--shadow-md);
   display: block;
@@ -1509,10 +1517,118 @@ body {
     text-align: center;
   }
 
-  .about-photo img {
-    margin: 0 auto var(--space-24);
+  .about-photo {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+}
+
+.about-photo img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 0;
+  box-shadow: var(--shadow-md);
+  display: block;
+}
+
+  /* Improve readability */
+  p, li, dt, dd {
+    font-size: var(--font-size-sm-mobile);
+    line-height: 1.8;
+  }
+
+  /* Navigation improvements */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 999;
+  }
+
+  /* Reduce padding on small containers */
+  .container {
+    padding-left: var(--mobile-padding);
+    padding-right: var(--mobile-padding);
+  }
+
+  section {
+    padding: var(--space-24) var(--mobile-padding);
   }
 }
+
+/* MEDIUM PHONES & TABLETS (481px - 768px) */
+@media (max-width: 768px) and (min-width: 481px) {
+  :root {
+    font-size: 15px;
+  }
+
+  /* Slightly larger touch targets on tablets */
+  button, a, [role="button"] {
+    min-height: 44px;
+  }
+
+  .mobile-only {
+    display: block !important;
+  }
+
+  .tablet-only {
+    display: block !important;
+  }
+
+  input, textarea, select {
+    font-size: 16px;
+  }
+
+  /* Two-column on larger tablets */
+  .tablet-2-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-24);
+  }
+}
+
+/* LARGE TABLETS & SMALL DESKTOPS (769px - 1024px) */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .tablet-and-up {
+    display: block;
+  }
+
+  .mobile-only {
+    display: none !important;
+  }
+
+  .hide-tablet {
+    display: none !important;
+  }
+}
+
+/* ORIENTATION-SPECIFIC FIXES */
+@media (orientation: portrait) and (max-width: 768px) {
+  .hero-image img {
+    max-width: 90vw;
+  }
+
+  section {
+    padding: var(--space-24) var(--mobile-padding);
+  }
+}
+
+@media (orientation: landscape) and (max-height: 600px) {
+  .hero {
+    min-height: auto;
+    padding: var(--space-16) 0;
+  }
+
+  .hero-content {
+    gap: var(--space-16);
+    padding: var(--space-16);
+  }
+
+  nav {
+    padding: var(--space-8) 0;
+  }
+}
+
 
 /* ==========================================
    SOCIAL ICONS
