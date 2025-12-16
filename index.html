@@ -7,7 +7,104 @@
     <link rel="icon" type="image/png" href="images/favicon.png" />
     <link rel="stylesheet" href="main.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Minimal page-specific styles: lightbox + small enhancements */
+    .page-title { margin: 0 0 0.5rem; }
+    .page-subtitle { margin: 0 0 1.5rem; color: var(--muted); }
+
+    /* Use the global .gallery styles from main.css. Add click affordances only. */
+    .gallery figure{
+      position: relative;
+      cursor: zoom-in;
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .gallery img, .gallery video{ display:block; width:100%; height:100%; object-fit:cover; }
+
+    .media-badge{
+      position: absolute;
+      right: 10px; bottom: 10px;
+      font-size: 12px; padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.6);
+      color:#fff; backdrop-filter: blur(3px);
+      user-select:none; pointer-events:none;
+    }
+
+    /* Lightbox overlay */
+    .lightbox {
+      position: fixed; inset: 0;
+      display: none; align-items: center; justify-content: center;
+      background: rgba(0,0,0,0.9);
+      z-index: 9999;
+    }
+    .lightbox.open { display: flex; }
+    .lightbox-content {
+      position: relative;
+      max-width: 95vw; max-height: 92vh; width: min(1100px, 95vw);
+      display:flex; align-items:center; justify-content:center;
+    }
+    .lightbox img, .lightbox video {
+      max-width: 100%; max-height: 92vh; width: auto; height:auto;
+      border-radius: 12px;
+      outline: 1px solid rgba(255,255,255,0.15);
+      background:#000;
+    }
+    .lightbox .close,
+    .lightbox .prev,
+    .lightbox .next {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      border: 0; background: rgba(255,255,255,0.12); color: #fff;
+      padding: 0.65rem 0.8rem; border-radius: 10px; cursor: pointer; font-weight: 700;
+    }
+    .lightbox .close { top: 2%; right: 2%; transform: none; }
+    .lightbox .prev { left: 1.2%; }
+    .lightbox .next { right: 1.2%; }
+    .lightbox .close:hover, .lightbox .prev:hover, .lightbox .next:hover{
+      background: rgba(255,255,255,0.22);
+    }
+    .caption {
+      margin-top: 0.75rem;
+      text-align: center;
+      color: #f0f0f0;
+      font-size: 0.95rem;
+      opacity: 0.85;
+      max-width: min(900px, 90vw);
+    }
+  </style>
 </head>
+
+<script>
+(function () {
+  // 1) Images: eager-load the first couple above the fold; lazy-load the rest
+  const imgs = Array.from(document.querySelectorAll('img'));
+  imgs.forEach((img, i) => {
+    if (i < 2) {                 // first two images on the page
+      img.loading = 'eager';
+      img.fetchPriority = 'high';
+    } else {
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      img.fetchPriority = 'low';
+    }
+  });
+
+  // 2) Videos: don’t download until needed, and pause when off-screen
+  const vids = document.querySelectorAll('video');
+  vids.forEach(v => { v.preload = 'none'; });
+
+  const iv = new IntersectionObserver((entries) => {
+    entries.forEach(({isIntersecting, target:v}) => {
+      if (!isIntersecting && !v.paused) v.pause();
+    });
+  }, { threshold: 0.1 });
+  vids.forEach(v => iv.observe(v));
+
+  // 3) Lightbox thumbnails: (already using smaller thumbs)
+  // Make sure full-res loads ONLY when opened (your existing lightbox does this).
+})();
+</script>
+
 <body>
     <!-- Navigation Bar -->
     <nav class="navbar">
@@ -116,12 +213,14 @@
     </div>
     </section>
 
-    <!-- Lightbox / modal copied from portfolio.html -->
-    <div id="galleryModal" class="gallery-modal">
-    <span class="gallery-close">&times;</span>
-    <img class="gallery-modal-img" id="galleryModalImg" alt="">
-    <div class="gallery-caption" id="galleryModalCaption"></div>
-    </div>
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" aria-modal="true" role="dialog" aria-label="Media viewer">
+    <div class="lightbox-content" id="lbContent" tabindex="0" aria-live="polite"></div>
+    <button class="close" id="lbClose" aria-label="Close (Esc)">✕</button>
+    <button class="prev" id="lbPrev" aria-label="Previous (←)">⬅</button>
+    <button class="next" id="lbNext" aria-label="Next (→)">➡</button>
+    <p class="caption" id="lbCaption"></p>
+  </div>
 
   <script>
     // Vanilla JS lightbox supporting images & videos, with arrow keys and ESC.
