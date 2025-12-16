@@ -1348,27 +1348,22 @@ body {
   border-top: 1px solid rgba(0,0,0,0.06);
 }
 
-/* Strip-style gallery similar to Pines */
+/* Responsive grid gallery similar to Pines */
 .gallery.gallery--strip {
-  display: flex;
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  gap: 20px;              /* matches Pines gutter ~20px */
-  scroll-snap-type: x mandatory;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 12px;
   padding: 0.75rem 0;
+  width: 100%;
 }
 
-/* Each tile behaves like a strip item */
+/* Each tile in the grid */
 .gallery.gallery--strip figure {
-  flex: 0 0 auto;
-  width: clamp(260px, 30vw, 420px);
-  height: 260px;          /* fixed height like rowHeight 324px in Pines config */
   margin: 0;
   position: relative;
   cursor: zoom-in;
-  border-radius: var(--radius);
   overflow: hidden;
-  scroll-snap-align: start;
+  aspect-ratio: 1 / 1;
 }
 
 /* Ensure edge-to-edge cropping */
@@ -1380,9 +1375,41 @@ body {
   display: block;
 }
 
-/* Optional: hide captions under tiles to match Pines’ no-caption strips */
+/* Optional: hide captions under tiles to match Pines' no-caption strips */
 .gallery.gallery--strip figcaption {
   display: none;
+}
+
+@media (max-width: 768px) {
+  .job-block {
+    margin: 2rem auto;
+    padding: 1.5rem 0;
+  }
+
+  .gallery.gallery--strip {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+    padding: 0.5rem 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .gallery.gallery--strip {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 8px;
+  }
+
+  .job-block {
+    margin: 1.5rem auto;
+    padding: 1rem 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .gallery.gallery--strip {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 6px;
+  }
 }
 
 @media (max-width: 768px) {
