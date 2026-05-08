@@ -1,2 +1,2 @@
-# internalytics
-Analytical internship intelligence hub – transforms recruiting data into actionable insights.
+# BritneyButtonEvents
+Formerly Internalytics, currently sisters website.
